@@ -279,17 +279,26 @@ fetch(`${apiURL}?q=Projects`)
 
 const showDetails = (type, href) => {
   document.getElementById("loader").style.display = "block";
-  document.querySelector(".go_back").removeEventListener('click', () => { });
+  document.querySelector(".go_back").removeEventListener('click', () => {
+    document.querySelector(`.renderer`).classList.remove("active");
+    document.querySelector(`.${type}`).classList.add("active");
+  });
   hideArticles('renderer');
   fetch(`${apiURL}?q=${href}&p=${type}`)
     .then((response) => response.json())
     .then((data) => {
-      const iframe = document.querySelector('#pageRender div');
+      const iframe = document.querySelector('#render-content');
       // const iframeDocument = iframe.contentWindow.document;
       // iframeDocument.open();
       // iframeDocument.write(data.content);
       // iframeDocument.close();
-      iframe.innerHTML = data.content;
+      // let output = d.querySelector('#output')
+      let shadow = iframe.attachShadow({
+        mode: 'closed'
+      });
+      shadow.innerHTML = data.content; // HTML content and style injected 
+
+      // iframe.innerHTML = data.content;
       document.getElementById("loader").style.display = "none";
     });
   document.querySelector(".go_back").addEventListener('click', () => {
