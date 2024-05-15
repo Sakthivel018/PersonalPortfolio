@@ -293,12 +293,12 @@ const showDetails = (type, href) => {
       // iframeDocument.write(data.content);
       // iframeDocument.close();
       // let output = d.querySelector('#output')
-      let shadow = iframe.attachShadow({
-        mode: 'closed'
-      });
-      shadow.innerHTML = data.content; // HTML content and style injected 
+      // let shadow = iframe.attachShadow({
+      //   mode: 'closed'
+      // });
+      // shadow.innerHTML = data.content; // HTML content and style injected 
 
-      // iframe.innerHTML = data.content;
+      iframe.innerHTML = data.content;
       document.getElementById("loader").style.display = "none";
     });
   document.querySelector(".go_back").addEventListener('click', () => {
@@ -308,7 +308,7 @@ const showDetails = (type, href) => {
 };
 
 const hideArticles = className => {
-  const pages = document.querySelectorAll("[data-page]");
+  const pages = document.querySelectorAll("[data-page], .renderer");
   pages.forEach(articlePage => {
     articlePage.classList.remove("active");
   });
