@@ -250,7 +250,7 @@ fetch(`${apiURL}?q=Projects`)
       const category = eachProject.category;
       allCategories.add(category);
       let li_tag = `<li class="project-item active" data-filter-item data-category="${category}">
-      <a onclick="showDetails('project','${href}');" style="cursor: pointer;">
+      <a onclick="showDetails('projects','${href}');" style="cursor: pointer;">
         <figure class="project-img">
           <img src="${img_src}" alt="${img_alt}" loading="lazy">
         </figure>
@@ -314,4 +314,7 @@ const hideArticles = className => {
   });
   window.scrollTo(0, 0);
   document.querySelector(`.${className}`).classList.add("active");
+  if (className !== "renderer") {
+    localStorage.setItem('articleState', className);
+  };
 };

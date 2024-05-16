@@ -104,4 +104,4 @@ for (let i = 0; i < navigationLinks.length; i++) {
   });
 }
 
-document.querySelector("[data-nav-link='contact ']").click();
+document.querySelector("[data-nav-link='contact']").click();

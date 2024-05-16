@@ -148,6 +148,7 @@ for (let i = 0; i < navigationLinks.length; i++) {
         pages[i].classList.add("active");
         navigationLinks[i].classList.add("active");
         window.scrollTo(0, 0);
+        localStorage.setItem('articleState', this.innerHTML.toLowerCase());
       } else {
         pages[i].classList.remove("active");
         navigationLinks[i].classList.remove("active");
@@ -156,3 +157,13 @@ for (let i = 0; i < navigationLinks.length; i++) {
 
   });
 }
+
+const changeState = () => {
+  const storedState = localStorage.getItem('articleState');
+  if (storedState) {
+    // hideArticles(storedState);
+    document.querySelector(`[load-page="${storedState}"]`).click();
+  }
+};
+
+window.onload = changeState();
