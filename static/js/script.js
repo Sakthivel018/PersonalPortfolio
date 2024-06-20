@@ -1,4 +1,4 @@
-const apiURL = "https://script.google.com/macros/s/AKfycbzh4mYL-EMU3V8qNaE__okpl7Gm1QLhmZGAmOK7Nsghi_q30SKOX5bXeKSkZDfcmtOl/exec";
+const apiURL = "https://script.google.com/macros/s/AKfycbwnnth6HVa_OX_QjMEl6cAHD41pV60MPfCJCZlIVzZDzhbijNXmCSsdV2psMOEyN61K/exec";
 
 
 fetch(`${apiURL}?q=SocialList`)
@@ -250,7 +250,7 @@ fetch(`${apiURL}?q=Projects`)
       const category = eachProject.category;
       allCategories.add(category);
       let li_tag = `<li class="project-item active" data-filter-item data-category="${category}">
-      <a onclick="showDetails('project','${href}');" style="cursor: pointer;">
+      <a onclick="showDetails('projects','${href}');" style="cursor: pointer;">
         <figure class="project-img">
           <img src="${img_src}" alt="${img_alt}" loading="lazy">
         </figure>
