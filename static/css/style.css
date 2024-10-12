@@ -1820,7 +1820,7 @@ textarea.form-input::-webkit-resizer { display: none; }
    * REUSED STYLE
    */
 
-  .sidebar, article { width: auto; }
+  .sidebar, article { width: 1080px; }
 
   article { max-height: 100%;
     overflow-y: scroll;
@@ -1834,7 +1834,7 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   main {
     max-width: 1400px;
-    margin-inline: auto;
+    margin-inline: 5rem;
     display: flex;
     justify-content: center;
     align-items: stretch;
