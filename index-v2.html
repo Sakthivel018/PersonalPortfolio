@@ -1,496 +1,593 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Portfolio</title>
-  <!-- Themes -->
-  <link rel="shortcut icon" href="./static/images/new/favicon-img-light.svg" type="image/x-icon">
-  <!-- Tailwind css link -->
-  <link rel="stylesheet" href="./static/css/output.css">
-  <!-- Font -->
+  <title>Sakthivel Raja | Full Stack & AI/ML Engineer</title>
+  <!--
+    - favicon
+  -->
+  <link rel="shortcut icon" href="./static/images/favicon-logo.png" type="image/x-icon">
+  <!--
+    - google font link
+  -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+  <!--
+    - tailwind css
+  -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'jet': '#1f1f1f',
+            'onyx': '#2b2b2b',
+            'eerie-black-1': '#212121',
+            'eerie-black-2': '#1e1e1e',
+            'smoky-black': '#0f0f0f',
+            'white-1': '#ffffff',
+            'white-2': '#fafafa',
+            'orange-yellow-crayola': '#f9bf45',
+            'vegas-gold': '#c5a644',
+            'light-gray': '#d4d4d4',
+            'light-gray-70': 'rgba(212, 212, 212, 0.7)',
+            'bittersweet-shimmer': '#c94f4f',
+          },
+          fontFamily: {
+            'poppins': ['Poppins', 'sans-serif'],
+          },
+          boxShadow: {
+            '1': '-4px 8px 24px rgba(0, 0, 0, 0.25)',
+            '2': '0 16px 30px rgba(0, 0, 0, 0.25)',
+            '3': '0 16px 40px rgba(0, 0, 0, 0.25)',
+            '4': '0 25px 50px rgba(0, 0, 0, 0.15)',
+            '5': '0 24px 80px rgba(0, 0, 0, 0.25)',
+          },
+          animation: {
+            'fade': 'fade 0.5s ease backwards',
+            'scale-up': 'scaleUp 0.25s ease forwards',
+            'pulse': 'pulse 1.5s infinite ease-in-out',
+          },
+          keyframes: {
+            fade: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            scaleUp: {
+              '0%': { transform: 'scale(0.5)' },
+              '100%': { transform: 'scale(1)' },
+            },
+            pulse: {
+              '0%': {
+                transform: 'scale(0.8)',
+                backgroundColor: '#f9bf45',
+                boxShadow: '0 0 0 0 #f9bf45',
+              },
+              '50%': {
+                transform: 'scale(1.2)',
+                backgroundColor: '#f9bf45',
+                boxShadow: '0 0 0 10px #f9bf45',
+              },
+              '100%': {
+                transform: 'scale(0.8)',
+                backgroundColor: '#c5a644',
+                boxShadow: '0 0 0 0 #c5a644',
+              },
+            },
+          },
+        },
+      },
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .bg-gradient-onyx {
+        background: linear-gradient(to bottom right, #1f1f1f 3%, #191919 97%);
+      }
+      .bg-gradient-jet {
+        background: linear-gradient(to bottom right, rgba(30, 30, 30, 0.251) 0%, rgba(28, 28, 28, 0) 100%), #1e1e1e;
+      }
+      .bg-gradient-yellow-1 {
+        background: linear-gradient(to bottom right, #f9bf45 0%, rgba(255, 193, 7, 0) 50%);
+      }
+      .bg-gradient-yellow-2 {
+        background: linear-gradient(135deg, rgba(249, 191, 69, 0.251) 0%, rgba(255, 193, 7, 0) 59.86%), #1e1e1e;
+      }
+      .border-gradient-onyx {
+        background: linear-gradient(to bottom right, #1f1f1f 0%, rgba(31, 31, 31, 0) 50%);
+      }
+      .text-gradient-yellow {
+        background: linear-gradient(to right, #f9bf45, #f9bf45);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .content-card {
+        position: relative;
+        background: linear-gradient(to bottom right, #1f1f1f 0%, rgba(31, 31, 31, 0) 50%);
+        padding: 15px;
+        padding-top: 45px;
+        border-radius: 14px;
+        box-shadow: 0 16px 30px rgba(0, 0, 0, 0.25);
+        cursor: pointer;
+        z-index: 1;
+      }
+      .content-card::before {
+        content: "";
+        position: absolute;
+        inset: 1px;
+        background: linear-gradient(to bottom right, rgba(30, 30, 30, 0.251) 0%, rgba(28, 28, 28, 0) 100%), #1e1e1e;
+        border-radius: inherit;
+        z-index: -1;
+      }
+      .icon-box {
+        position: relative;
+        background: linear-gradient(to bottom right, #1f1f1f 0%, rgba(31, 31, 31, 0) 50%);
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 16px;
+        color: #f9bf45;
+        box-shadow: -4px 8px 24px rgba(0, 0, 0, 0.25);
+        z-index: 1;
+      }
+      .icon-box::before {
+        content: "";
+        position: absolute;
+        inset: 1px;
+        background: #212121;
+        border-radius: inherit;
+        z-index: -1;
+      }
+      .service-item {
+        position: relative;
+        background: linear-gradient(to bottom right, #1f1f1f 0%, rgba(31, 31, 31, 0) 50%);
+        padding: 20px;
+        border-radius: 14px;
+        box-shadow: 0 16px 30px rgba(0, 0, 0, 0.25);
+        z-index: 1;
+      }
+      .service-item::before {
+        content: "";
+        position: absolute;
+        inset: 1px;
+        background: linear-gradient(to bottom right, rgba(30, 30, 30, 0.251) 0%, rgba(28, 28, 28, 0) 100%), #1e1e1e;
+        border-radius: inherit;
+        z-index: -1;
+      }
+      .blog-post-item > a {
+        position: relative;
+        background: linear-gradient(to bottom right, #1f1f1f 0%, rgba(31, 31, 31, 0) 50%);
+        height: 100%;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        border-radius: 16px;
+        z-index: 1;
+      }
+      .blog-post-item > a::before {
+        content: "";
+        position: absolute;
+        inset: 1px;
+        border-radius: inherit;
+        background: #212121;
+        z-index: -1;
+      }
+      .form-btn {
+        position: relative;
+        width: 100%;
+        background: linear-gradient(to bottom right, #1f1f1f 0%, rgba(31, 31, 31, 0) 50%);
+        color: #f9bf45;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        padding: 13px 20px;
+        border-radius: 14px;
+        font-size: 14px;
+        text-transform: capitalize;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+        z-index: 1;
+        transition: all 0.25s ease;
+      }
+      .form-btn::before {
+        content: "";
+        position: absolute;
+        inset: 1px;
+        background: linear-gradient(to bottom right, rgba(30, 30, 30, 0.251) 0%, rgba(28, 28, 28, 0) 100%), #1e1e1e;
+        border-radius: inherit;
+        z-index: -1;
+        transition: all 0.25s ease;
+      }
+      .form-btn:hover {
+        background: linear-gradient(to bottom right, #f9bf45 0%, rgba(255, 193, 7, 0) 50%);
+      }
+      .form-btn:hover::before {
+        background: linear-gradient(135deg, rgba(249, 191, 69, 0.251) 0%, rgba(255, 193, 7, 0) 59.86%), #1e1e1e;
+      }
+      .info_more-btn {
+        position: absolute;
+        top: -15px;
+        right: -15px;
+        border-radius: 0 15px;
+        font-size: 13px;
+        color: #f9bf45;
+        background: linear-gradient(to bottom right, #1f1f1f 0%, rgba(31, 31, 31, 0) 50%);
+        padding: 10px;
+        box-shadow: 0 16px 30px rgba(0, 0, 0, 0.25);
+        transition: all 0.25s ease;
+        z-index: 1;
+      }
+      .info_more-btn::before {
+        content: "";
+        position: absolute;
+        inset: 1px;
+        background: linear-gradient(to bottom right, rgba(30, 30, 30, 0.251) 0%, rgba(28, 28, 28, 0) 100%), #1e1e1e;
+        transition: all 0.25s ease;
+        z-index: -1;
+      }
+      .info_more-btn:hover,
+      .info_more-btn:focus {
+        background: linear-gradient(to bottom right, #f9bf45 0%, rgba(255, 193, 7, 0) 50%);
+      }
+      .info_more-btn:hover::before,
+      .info_more-btn:focus::before {
+        background: linear-gradient(135deg, rgba(249, 191, 69, 0.251) 0%, rgba(255, 193, 7, 0) 59.86%), #1e1e1e;
+      }
+      .go_back {
+        color: #f9bf45;
+        background: linear-gradient(to bottom right, #1f1f1f 0%, rgba(31, 31, 31, 0) 50%);
+        padding: 10px;
+        box-shadow: 0 16px 30px rgba(0, 0, 0, 0.25);
+        transition: all 0.25s ease;
+        z-index: 1;
+        border-radius: 15px 0 0 0;
+        font-size: 13px;
+      }
+      .scrollbar-thin {
+        scrollbar-width: thin;
+        scrollbar-color: #f9bf45 #1e1e1e;
+      }
+      .scrollbar-thin::-webkit-scrollbar {
+        width: 15px;
+        margin-top: 2rem;
+      }
+      .scrollbar-thin::-webkit-scrollbar-track {
+        background: #1e1e1e;
+        border-radius: 5px;
+      }
+      .scrollbar-thin::-webkit-scrollbar-thumb {
+        background-color: #f9bf45;
+        border-radius: 14px;
+        border: 3px solid #1e1e1e;
+      }
+      .has-scrollbar::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+      }
+      .has-scrollbar::-webkit-scrollbar-track {
+        background: #2b2b2b;
+        border-radius: 5px;
+      }
+      .has-scrollbar::-webkit-scrollbar-thumb {
+        background: #f9bf45;
+        border-radius: 5px;
+      }
+      .has-scrollbar::-webkit-scrollbar-button {
+        width: 20px;
+      }
+    }
+  </style>
 </head>
+<body class="font-poppins bg-smoky-black scrollbar-thin">
+  <div id="loader" class="fixed top-0 left-0 w-full h-full bg-gray-700 bg-opacity-70 flex justify-center items-center z-[9999]">
+    <section class="dots-container flex items-center justify-center h-full w-full">
+      <div class="dot h-5 w-5 mr-2.5 rounded-[10px] bg-[#b3d4fc] animate-pulse"></div>
+      <div class="dot h-5 w-5 mr-2.5 rounded-[10px] bg-[#b3d4fc] animate-pulse" style="animation-delay: -0.1s"></div>
+      <div class="dot h-5 w-5 mr-2.5 rounded-[10px] bg-[#b3d4fc] animate-pulse" style="animation-delay: 0.1s"></div>
+      <div class="dot h-5 w-5 mr-2.5 rounded-[10px] bg-[#b3d4fc] animate-pulse" style="animation-delay: 0.3s"></div>
+      <div class="dot h-5 w-5 rounded-[10px] bg-[#b3d4fc] animate-pulse" style="animation-delay: 0.5s"></div>
+    </section>
+  </div>
 
-<body class="w-full h-full">
-
-  <main class="flex w-full h-full ">
-    <!-- Side Bar -->
-    <aside class="flex w-1/4 h-full" data-sidebar>
-      <div
-        class="border-2 border-gray-300 m-8 flex flex-col items-center justify-center w-full min-h-[250px] h-full rounded-lg">
-        <div
-          class="flex items-center justify-center m-4 h-full bg-gradient-to-br from-slate-100 to-orange-500 rounded-xl ">
-          <img src="./static/images/my-avatar.png" alt="Sakthivel Raja" />
+  <main class="mx-3 mb-20 min-w-[259px] md:mx-6 md:mb-24 lg:mx-auto lg:max-w-[1080px] lg:flex lg:gap-6 lg:mt-16 lg:mb-12">
+    <!--
+      - #SIDEBAR
+    -->
+    <aside class="sidebar mb-4 max-h-[112px] overflow-hidden transition-all duration-500 ease-in-out bg-eerie-black-2 border border-jet rounded-[20px] p-4 shadow-1 lg:sticky lg:top-11 lg:max-h-max lg:h-[55rem] lg:mb-0 lg:pt-16 lg:px-8 lg:pb-4 lg:z-1 lg:flex-shrink-0 lg:w-[300px]" data-sidebar>
+      <div class="sidebar-info flex items-start gap-4 lg:flex-col lg:items-center">
+        <figure class="avatar-box bg-gradient-onyx rounded-[20px]">
+          <img src="./static/images/my-avatar.png" alt="Sakthivel Raja" width="80" loading="lazy" class="lg:w-[150px]">
+        </figure>
+        <div class="info-content lg:text-center">
+          <h1 class="name text-white-2 text-lg font-medium tracking-[-0.25px] mb-2.5 lg:text-2xl lg:whitespace-nowrap" title="Sakthivel Raja" id="name"></h1>
+          <p class="title text-white-1 bg-onyx text-xs font-light px-3 py-1 rounded-lg lg:mx-auto" id="designation"></p>
         </div>
-        <div class="info-content m-1 flex flex-col items-center gap-2 justify-center">
-          <h1 class="name font-poppins font-bold text-2xl" title="Sakthivel Raja" id="name"></h1>
-          <p class="p-2 font-semibold text-md rounded-md bg-gradient-to-br from-orange-200 to-orange-400"
-            id="designation"></p>
-        </div>
-        <div class="w-4/5 h-1 my-4 bg-gray-300"></div>
-        <ul id="contact_list" class="grid gap-16 grid-cols-1 mb-4"></ul>
-        <div class="w-4/5 h-1 my-4 bg-gray-300"></div>
-        <ul class="flex items-center justify-center pb-4 gap-2" id="social_list"></ul>
+        <button class="info_more-btn absolute top-[-15px] right-[-15px] rounded-[0_15px] text-xs text-orange-yellow-crayola px-2.5 py-2.5 shadow-2 transition-all duration-300 z-1 lg:hidden" data-sidebar-btn>
+          <span>Show Contacts</span>
+          <ion-icon name="chevron-down"></ion-icon>
+        </button>
+      </div>
+      <div class="sidebar-info_more opacity-0 invisible transition-all duration-500 lg:opacity-100 lg:visible">
+        <div class="separator w-full h-px bg-jet my-4 lg:my-5 last:opacity-0"></div>
+        <ul class="contacts-list grid grid-cols-1 gap-4 lg:grid-cols-1 lg:gap-6">
+          <li class="contact-item flex items-center gap-4 min-w-full">
+            <div class="icon-box">
+              <ion-icon name="mail-outline"></ion-icon>
+            </div>
+            <div class="contact-info max-w-[calc(100%-46px)] w-[calc(100%-46px)] lg:max-w-full lg:w-full">
+              <p class="contact-title text-light-gray-70 text-xs uppercase mb-0.5">Email</p>
+              <a href="mailto:sakthivellbk0@gmail.com" class="contact-link text-white-2 text-sm lg:text-sm lg:whitespace-nowrap lg:overflow-hidden lg:text-ellipsis" id="email"></a>
+            </div>
+          </li>
+          <li class="contact-item flex items-center gap-4 min-w-full">
+            <div class="icon-box">
+              <ion-icon name="phone-portrait-outline"></ion-icon>
+            </div>
+            <div class="contact-info max-w-[calc(100%-46px)] w-[calc(100%-46px)] lg:max-w-full lg:w-full">
+              <p class="contact-title text-light-gray-70 text-xs uppercase mb-0.5">Phone</p>
+              <a href="tel:+916381207106" class="contact-link text-white-2 text-sm lg:text-sm lg:whitespace-nowrap lg:overflow-hidden lg:text-ellipsis" id="ph_no"></a>
+            </div>
+          </li>
+          <li class="contact-item flex items-center gap-4 min-w-full">
+            <div class="icon-box">
+              <ion-icon name="calendar-outline"></ion-icon>
+            </div>
+            <div class="contact-info max-w-[calc(100%-46px)] w-[calc(100%-46px)] lg:max-w-full lg:w-full">
+              <p class="contact-title text-light-gray-70 text-xs uppercase mb-0.5">Birthday</p>
+              <time datetime="2000-11-19" class="text-white-2 text-sm lg:text-sm" id="birthday"></time>
+            </div>
+          </li>
+          <li class="contact-item flex items-center gap-4 min-w-full">
+            <div class="icon-box">
+              <ion-icon name="location-outline"></ion-icon>
+            </div>
+            <div class="contact-info max-w-[calc(100%-46px)] w-[calc(100%-46px)] lg:max-w-full lg:w-full">
+              <p class="contact-title text-light-gray-70 text-xs uppercase mb-0.5">Location</p>
+              <address class="text-white-2 text-sm lg:text-sm not-italic" id="location"></address>
+            </div>
+          </li>
+        </ul>
+        <div class="separator w-full h-px bg-jet my-4 lg:my-5 last:opacity-0"></div>
+        <ul class="social-list flex justify-center items-center gap-4 pb-1 pl-2 lg:justify-center" id="social_list">
+        </ul>
       </div>
     </aside>
 
 
-    <!-- Content -->
-    <div class="w-3/4 py-8 flex items-center justify-center">
-      <div class="flex w-full mx-8 h-full rounded-lg border-2 border-gray-300 overflow-y-scroll">
-        
-        <!-- Navbar -->
-        <nav
-          class="absolute bottom-auto top-0 right-0 w-max h-min mr-2 left-auto bg-gradient-to-br from-orange-200 to-orange-400 border-1 border-gray-300 rounded-md z-50 shadow-md mr-8 mt-8 font-semibold text-md">
-          <ul class="navbar-list flex flex-wrap items-center justify-center gap-8 py-4 px-8">
-            <li class="navbar-item">
-              <button class="navbar-link" data-nav-link="about">About</button>
-            </li>
-            <li class="navbar-item">
-              <button class="navbar-link" data-nav-link="resume">Resume</button>
-            </li>
-            <li class="navbar-item">
-              <button class="navbar-link" data-nav-link="project">Projects</button>
-            </li>
-            <li class="navbar-item">
-              <button class="navbar-link" data-nav-link="blog">Blog</button>
-            </li>
-            <li class="navbar-item">
-              <button class="navbar-link" data-nav-link="contact">Contact</button>
+    <!--
+      - #main-content
+    -->
+    <div class="main-content flex-1 lg:h-[55rem] lg:pr-4">
+      <!--
+        - #NAVBAR
+      -->
+      <nav class="navbar fixed bottom-0 left-0 w-full bg-[rgba(30, 30, 30, 0.75)] backdrop-blur-[10px] border border-jet rounded-[12px_12px_0_0] shadow-2 z-5 lg:static lg:bg-transparent lg:backdrop-blur-0 lg:border-0 lg:rounded-none lg:shadow-none lg:ml-auto lg:w-max lg:mr-4 lg:top-0 lg:right-0 lg:rounded-[0_0_0_20px] lg:px-5">
+        <ul class="navbar-list flex flex-wrap justify-center items-center px-2.5 lg:gap-8 lg:px-5">
+          <li class="navbar-item">
+            <button class="navbar-link text-light-gray text-xs py-5 px-2 transition-colors duration-300 active text-orange-yellow-crayola lg:text-sm lg:font-medium" data-nav-link load-page="about">About</button>
+          </li>
+          <li class="navbar-item">
+            <button class="navbar-link text-light-gray text-xs py-5 px-2 transition-colors duration-300 hover:text-light-gray-70 lg:text-sm lg:font-medium" data-nav-link load-page="resume">Resume</button>
+          </li>
+          <li class="navbar-item">
+            <button class="navbar-link text-light-gray text-xs py-5 px-2 transition-colors duration-300 hover:text-light-gray-70 lg:text-sm lg:font-medium" data-nav-link load-page="projects">Projects</button>
+          </li>
+          <li class="navbar-item">
+            <button class="navbar-link text-light-gray text-xs py-5 px-2 transition-colors duration-300 hover:text-light-gray-70 lg:text-sm lg:font-medium" data-nav-link load-page="blog">Blog</button>
+          </li>
+          <li class="navbar-item">
+            <button class="navbar-link text-light-gray text-xs py-5 px-2 transition-colors duration-300 hover:text-light-gray-70 lg:text-sm lg:font-medium" data-nav-link load-page="contact">Contact</button>
+          </li>
+        </ul>
+      </nav>
+
+
+      <!--
+        - #ABOUT
+      -->
+      <article class="about hidden bg-eerie-black-2 border border-jet rounded-[20px] p-4 shadow-1 animate-fade md:p-8 lg:p-8 active" data-page="about">
+        <header>
+          <h2 class="h2 article-title text-white-2 text-xl capitalize relative pb-2 mb-4 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 after:h-0.5 after:bg-gradient-yellow after:rounded-[3px] md:text-2xl md:pb-4 md:mb-5 md:after:w-10 md:after:h-1">About me</h2>
+        </header>
+        <section class="about-text text-light-gray text-sm font-light leading-6 md:text-base" id="about_me">
+        </section>
+
+        <!--
+          - service
+        -->
+        <section class="service mb-9 md:mb-9">
+          <h3 class="h3 service-title text-white-2 text-lg capitalize mb-5 md:text-xl md:mb-5">What I'm doing</h3>
+          <ul class="service-list grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-5" id="service_list">
+          </ul>
+        </section>
+
+        <!--
+          - testimonials
+        -->
+        <section class="testimonials mb-8 hidden" style="display: none;">
+          <h3 class="h3 testimonials-title text-white-2 text-lg capitalize mb-5 md:text-xl md:mb-6">Testimonials</h3>
+          <ul class="testimonials-list has-scrollbar flex justify-start items-start gap-4 mx-[-15px] px-4 pb-9 overflow-x-auto scroll-smooth overscroll-contain scroll-snap-type-x mandatory md:gap-8 md:mx-[-30px] md:px-8 md:pb-9" id="testimonials">
+          </ul>
+        </section>
+
+        <!--
+          - testimonials modal
+        -->
+        <div class="modal-container fixed top-0 left-0 w-full h-full flex justify-center items-center overflow-y-auto overscroll-contain z-20 pointer-events-none invisible" data-modal-container>
+          <div class="overlay fixed top-0 left-0 w-full h-full bg-[hsl(0,0%,5%)] opacity-0 invisible pointer-events-none z-1 transition-all duration-300" data-overlay></div>
+          <section class="testimonials-modal bg-eerie-black-2 relative px-4 mx-3 my-4 border border-jet rounded-[14px] shadow-5 transform scale-110 opacity-0 transition-all duration-300 z-2 md:p-8 md:flex md:justify-start md:items-stretch md:gap-7 md:max-w-[680px]">
+            <button class="modal-close-btn absolute top-4 right-4 bg-onyx rounded-lg w-8 h-8 flex justify-center items-center text-white-2 text-lg opacity-70 hover:opacity-100 focus:opacity-100">
+              <ion-icon name="close-outline"></ion-icon>
+            </button>
+            <div class="modal-img-wrapper flex flex-col items-center md:flex md:flex-col md:items-center">
+              <figure class="modal-avatar-box bg-gradient-onyx rounded-[14px] mb-4 shadow-2 md:rounded-[18px] md:mb-0">
+                <img src="./static/images/avatar-1.png" alt="avatar" width="80" data-modal-img loading="lazy" class="md:w-[80px]">
+              </figure>
+              <img src="./static/images/icon-quote.svg" alt="quote icon" loading="lazy" class="hidden md:block md:flex-grow md:w-[35px]">
+            </div>
+            <div class="modal-content">
+              <h4 class="h3 modal-title text-white-2 text-lg capitalize mb-1 md:text-xl" data-modal-title></h4>
+              <time datetime="2021-06-14" class="text-light-gray-70 text-sm font-light mb-2.5 block"></time>
+              <div data-modal-text>
+                <p>
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!--
+          - clients
+        -->
+        <!-- 
+        <section class="clients mb-4">
+          <h3 class="h3 clients-title text-white-2 text-lg capitalize mb-5">Clients</h3>
+          <ul class="clients-list has-scrollbar flex justify-start items-start gap-4 mx-[-15px] px-6 pb-6 overflow-x-auto scroll-smooth overscroll-contain scroll-snap-type-x mandatory scroll-padding-x-6 md:gap-12 md:mx-[-30px] md:px-12 md:pb-6 md:scroll-padding-x-12">
+            <li class="clients-item min-w-[calc(33.33%-10px)] scroll-snap-start md:min-w-[calc(25%-38px)]">
+              <a href="#">
+                <img src="./static/images/logo-1-color.png" alt="client logo">
+              </a>
             </li>
           </ul>
-        </nav>
+        </section> -->
+      </article>
 
-        <!-- Articles -->
 
-        <!-- About -->
-        <article class="about hidden" data-page="about">
-
-          <header>
-            <h2 class="h2 article-title">About me</h2>
-          </header>
-  
-          <section class="about-text" id="about_me"> 
-          </section>
-  
-  
-          <!--
-            - service
-          -->
-  
-          <section class="service">
-  
-            <h3 class="h3 service-title">What i'm doing</h3>
-  
-            <ul class="service-list" id="service_list">
-            </ul>
-  
-          </section>
-  
-  
-          <!--
-            - testimonials
-          -->
-  
-          <section class="testimonials">
-  
-            <h3 class="h3 testimonials-title">Testimonials</h3>
-  
-            <ul class="testimonials-list has-scrollbar" id="testimonials">
-            </ul>
-  
-          </section>
-  
-  
-          <!--
-            - testimonials modal
-          -->
-  
-          <div class="modal-container" data-modal-container>
-  
-            <div class="overlay" data-overlay></div>
-  
-            <section class="testimonials-modal">
-  
-              <button class="modal-close-btn" data-modal-close-btn>
-                <ion-icon name="close-outline"></ion-icon>
-              </button>
-  
-              <div class="modal-img-wrapper">
-                <figure class="modal-avatar-box">
-                  <img src="./static/images/avatar-1.png" alt="avatar" width="80" data-modal-img>
-                </figure>
-  
-                <img src="./static/images/icon-quote.svg" alt="quote icon">
-              </div>
-  
-              <div class="modal-content">
-  
-                <h4 class="h3 modal-title" data-modal-title></h4>
-  
-                <time datetime="2021-06-14"></time>
-  
-                <div data-modal-text>
-                  <p>
-                  </p>
-                </div>
-  
-              </div>
-  
-            </section>
-  
+      <!--
+        - #RESUME
+      -->
+      <article class="resume hidden bg-eerie-black-2 border border-jet rounded-[20px] p-4 shadow-1 animate-fade md:p-8 lg:p-8 lg:h-full lg:overflow-y-auto" data-page="resume">
+        <header>
+          <h2 class="h2 article-title text-white-2 text-xl capitalize relative pb-2 mb-8 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 after:h-0.5 after:bg-gradient-yellow after:rounded-[3px] md:text-2xl md:pb-4 md:mb-8 md:after:w-10 md:after:h-1">Resume</h2>
+        </header>
+        <section class="timeline mb-8">
+          <div class="title-wrapper flex items-center gap-4 mb-6">
+            <div class="icon-box">
+              <ion-icon name="laptop-outline"></ion-icon>
+            </div>
+            <h3 class="h3 text-white-2 text-lg">Experience</h3>
           </div>
-  
-  
-          <!-- clients -->
-
-  
-        </article>
-
-        <!-- Resume -->
-        <article class="resume hidden" data-page="resume">
-
-          <header>
-            <h2 class="h2 article-title">Resume</h2>
-          </header>
-  
-          <section class="timeline">
-  
-            <div class="title-wrapper">
-              <div class="icon-box">
-                <ion-icon name="book-outline"></ion-icon>
-              </div>
-  
-              <h3 class="h3">Education</h3>
+          <ol class="timeline-list text-sm ml-11 md:ml-16" id="experience">
+          </ol>
+        </section>
+        <section class="timeline mb-8">
+          <div class="title-wrapper flex items-center gap-4 mb-6">
+            <div class="icon-box">
+              <ion-icon name="book-outline"></ion-icon>
             </div>
-  
-            <ol class="timeline-list" id="education">
-            </ol>
-  
-          </section>
-  
-          <section class="timeline">
-  
-            <div class="title-wrapper">
-              <div class="icon-box">
-                <ion-icon name="book-outline"></ion-icon>
-              </div>
-  
-              <h3 class="h3">Experience</h3>
+            <h3 class="h3 text-white-2 text-lg">Education</h3>
+          </div>
+          <ol class="timeline-list text-sm ml-11 md:ml-16" id="education">
+          </ol>
+        </section>
+        <section class="timeline mb-8">
+          <div class="title-wrapper flex items-center gap-4 mb-6">
+            <div class="icon-box">
+              <ion-icon name="medal-outline"></ion-icon>
             </div>
-  
-            <ol class="timeline-list" id="experience">
-            </ol>
-  
-          </section>
-  
-          <section class="skill">
-  
-            <h3 class="h3 skills-title">My skills</h3>
-  
-            <ul class="skills-list content-card" id="skills">
-            </ul>
-  
-          </section>
-  
-        </article>
+            <h3 class="h3 text-white-2 text-lg">Certifications</h3>
+          </div>
+          <ol class="timeline-list text-sm ml-11 md:ml-16" id="certifications">
+          </ol>
+        </section>
+        <section class="skill">
+          <h3 class="h3 skills-title text-white-2 text-lg mb-5">My skills</h3>
+          <ul class="skills-list content-card p-5 md:p-8" id="skills">
+          </ul>
+        </section>
+      </article>
 
-        <!-- project -->
-        <article class="project hidden" data-page="project">
 
-          <header>
-            <h2 class="h2 article-title">Projects</h2>
-          </header>
-  
-          <section class="projects">
-  
-            <ul class="filter-list">
-  
-              <li class="filter-item">
-                <button class="active" data-filter-btn>All</button>
-              </li>
-  
-              <li class="filter-item">
-                <button data-filter-btn>Web design</button>
-              </li>
-  
-              <li class="filter-item">
-                <button data-filter-btn>Applications</button>
-              </li>
-  
-              <li class="filter-item">
-                <button data-filter-btn>Web development</button>
-              </li>
-  
-            </ul>
-  
-            <div class="filter-select-box">
-  
-              <button class="filter-select" data-select>
-  
-                <div class="select-value" data-select-value>Select category</div>
-  
-                <div class="select-icon">
-                  <ion-icon name="chevron-down"></ion-icon>
-                </div>
-  
-              </button>
-  
-              <ul class="select-list">
-  
-                <li class="select-item">
-                  <button data-select-item>All</button>
-                </li>
-  
-                <li class="select-item">
-                  <button data-select-item>Web design</button>
-                </li>
-  
-                <li class="select-item">
-                  <button data-select-item>Applications</button>
-                </li>
-  
-                <li class="select-item">
-                  <button data-select-item>Web development</button>
-                </li>
-  
-              </ul>
-  
-            </div>
-  
-            <ul class="project-list">
-  
-              <li class="project-item  active" data-filter-item data-category="web development">
-                <a href="#">
-  
-                  <figure class="project-img">
-                    <div class="project-item-icon-box">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </div>
-  
-                    <img src="./static/images/project-1.jpg" alt="finance" loading="lazy">
-                  </figure>
-  
-                  <h3 class="project-title">Finance</h3>
-  
-                  <p class="project-category">Web development</p>
-  
-                </a>
-              </li>
-  
-              <li class="project-item  active" data-filter-item data-category="web development">
-                <a href="#">
-  
-                  <figure class="project-img">
-                    <div class="project-item-icon-box">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </div>
-  
-                    <img src="./static/images/project-2.png" alt="orizon" loading="lazy">
-                  </figure>
-  
-                  <h3 class="project-title">Orizon</h3>
-  
-                  <p class="project-category">Web development</p>
-  
-                </a>
-              </li>
-  
-              <li class="project-item  active" data-filter-item data-category="web design">
-                <a href="#">
-  
-                  <figure class="project-img">
-                    <div class="project-item-icon-box">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </div>
-  
-                    <img src="./static/images/project-3.jpg" alt="fundo" loading="lazy">
-                  </figure>
-  
-                  <h3 class="project-title">Fundo</h3>
-  
-                  <p class="project-category">Web design</p>
-  
-                </a>
-              </li>
-  
-              <li class="project-item  active" data-filter-item data-category="applications">
-                <a href="#">
-  
-                  <figure class="project-img">
-                    <div class="project-item-icon-box">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </div>
-  
-                    <img src="./static/images/project-4.png" alt="brawlhalla" loading="lazy">
-                  </figure>
-  
-                  <h3 class="project-title">Brawlhalla</h3>
-  
-                  <p class="project-category">Applications</p>
-  
-                </a>
-              </li>
-  
-              <li class="project-item  active" data-filter-item data-category="web design">
-                <a href="#">
-  
-                  <figure class="project-img">
-                    <div class="project-item-icon-box">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </div>
-  
-                    <img src="./static/images/project-5.png" alt="dsm." loading="lazy">
-                  </figure>
-  
-                  <h3 class="project-title">DSM.</h3>
-  
-                  <p class="project-category">Web design</p>
-  
-                </a>
-              </li>
-  
-              <li class="project-item  active" data-filter-item data-category="web design">
-                <a href="#">
-  
-                  <figure class="project-img">
-                    <div class="project-item-icon-box">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </div>
-  
-                    <img src="./static/images/project-6.png" alt="metaspark" loading="lazy">
-                  </figure>
-  
-                  <h3 class="project-title">MetaSpark</h3>
-  
-                  <p class="project-category">Web design</p>
-  
-                </a>
-              </li>
-  
-              <li class="project-item  active" data-filter-item data-category="web development">
-                <a href="#">
-  
-                  <figure class="project-img">
-                    <div class="project-item-icon-box">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </div>
-  
-                    <img src="./static/images/project-7.png" alt="summary" loading="lazy">
-                  </figure>
-  
-                  <h3 class="project-title">Summary</h3>
-  
-                  <p class="project-category">Web development</p>
-  
-                </a>
-              </li>
-  
-              <li class="project-item  active" data-filter-item data-category="applications">
-                <a href="#">
-  
-                  <figure class="project-img">
-                    <div class="project-item-icon-box">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </div>
-  
-                    <img src="./static/images/project-8.jpg" alt="task manager" loading="lazy">
-                  </figure>
-  
-                  <h3 class="project-title">Task Manager</h3>
-  
-                  <p class="project-category">Applications</p>
-  
-                </a>
-              </li>
-  
-              <li class="project-item  active" data-filter-item data-category="web development">
-                <a href="#">
-  
-                  <figure class="project-img">
-                    <div class="project-item-icon-box">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </div>
-  
-                    <img src="./static/images/project-9.png" alt="arrival" loading="lazy">
-                  </figure>
-  
-                  <h3 class="project-title">Arrival</h3>
-  
-                  <p class="project-category">Web development</p>
-  
-                </a>
-              </li>
-  
-            </ul>
-  
-          </section>
-  
-        </article>
-
-        <!-- Blog -->
-        <article class="blog hidden" data-page="blog">
-
-          <header>
-            <h2 class="h2 article-title">Blog</h2>
-          </header>
-  
-          <section class="blog-posts">
-  
-            <ul class="blog-posts-list" id="blogs">
-           </ul>
-  
-          </section>
-  
-        </article>
-
-        <!-- Contact -->
-        <article class="contact h-full px-12 py-8 hidden" data-page="contact">
-
-          <header>
-            <h2 class="h2 article-title font-bold text-2xl text-orange-800">Contact</h2>
-          </header>
-          <div class="seperator h-1.5 rounded-lg w-1/6 bg-gradient-to-br from-orange-400 to-orange-500"></div>
-          <section class="contact-form">
-  
-            <h3 class="h3 form-title">Contact Form</h3>
-  
-            <form action="#" class="form" data-form>
-  
-              <div class="input-wrapper">
-                <input type="text" name="fullname" class="form-input" placeholder="Full name" required data-form-input>
-  
-                <input type="email" name="email" class="form-input" placeholder="Email address" required data-form-input>
+      <!--
+        - #project
+      -->
+      <article class="projects hidden bg-eerie-black-2 border border-jet rounded-[20px] p-4 shadow-1 animate-fade md:p-8 lg:p-8 lg:h-full lg:overflow-y-auto" data-page="projects">
+        <header>
+          <h2 class="h2 article-title text-white-2 text-xl capitalize relative pb-2 mb-8 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 after:h-0.5 after:bg-gradient-yellow after:rounded-[3px] md:text-2xl md:pb-4 md:mb-8 md:after:w-10 md:after:h-1">Projects</h2>
+        </header>
+        <section class="projects">
+          <ul class="filter-list hidden justify-start items-center gap-6 pl-1 mb-8 md:flex" id="project_filter_list" style="display: none;">
+          </ul>
+          <div class="filter-select-box relative mb-6 md:hidden">
+            <button class="filter-select bg-eerie-black-2 text-light-gray flex justify-between items-center w-full px-4 py-3 border border-jet rounded-[14px] text-sm font-light" data-select>
+              <div class="select-value" data-select-value>Select category</div>
+              <div class="select-icon">
+                <ion-icon name="chevron-down"></ion-icon>
               </div>
-  
-              <textarea name="message" class="form-input" placeholder="Your Message" required data-form-input></textarea>
-  
-              <button class="form-btn" type="submit" disabled data-form-btn>
-                <ion-icon name="paper-plane"></ion-icon>
-                <span>Send Message</span>
-              </button>
-  
-            </form>
-  
-          </section>
-  
-        </article>
-  
-      </div>
+            </button>
+            <ul class="select-list absolute top-[calc(100%+6px)] w-full px-1.5 py-1.5 border border-jet rounded-[14px] bg-eerie-black-2 z-2 opacity-0 invisible pointer-events-none transition-all duration-150 ease-in-out" id="project_select_list">
+            </ul>
+          </div>
+          <ul class="project-list grid grid-cols-1 gap-8 mb-2.5 md:grid-cols-2 lg:grid-cols-3" id="project_list">
+          </ul>
+        </section>
+      </article>
+
+
+      <!--
+        - #BLOG
+      -->
+      <article class="blog hidden bg-eerie-black-2 border border-jet rounded-[20px] p-4 shadow-1 animate-fade md:p-8 lg:p-8 lg:h-full lg:overflow-y-auto" data-page="blog">
+        <header>
+          <h2 class="h2 article-title text-white-2 text-xl capitalize relative pb-2 mb-8 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 after:h-0.5 after:bg-gradient-yellow after:rounded-[3px] md:text-2xl md:pb-4 md:mb-8 md:after:w-10 md:after:h-1">Blog</h2>
+        </header>
+        <section class="blog-posts mb-2.5">
+          <ul class="blog-posts-list grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-8" id="blogs">
+          </ul>
+        </section>
+      </article>
+
+
+      <!--
+        - #CONTACT
+      -->
+      <article class="contact hidden bg-eerie-black-2 border border-jet rounded-[20px] p-4 shadow-1 animate-fade md:p-8 lg:p-8 lg:h-full" data-page="contact">
+        <header>
+          <h2 class="h2 article-title text-white-2 text-xl capitalize relative pb-2 mb-8 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 after:h-0.5 after:bg-gradient-yellow after:rounded-[3px] md:text-2xl md:pb-4 md:mb-8 md:after:w-10 md:after:h-1">Contact</h2>
+        </header>
+        <section class="contact-form">
+          <h3 class="h3 form-title text-white-2 text-lg capitalize mb-5">Contact Form</h3>
+          <form action="#" class="form" data-form>
+            <div class="input-wrapper grid grid-cols-1 gap-6 mb-6 md:grid-cols-2 md:gap-8 md:mb-8">
+              <input type="text" name="fullname" class="form-input text-white-2 text-sm font-medium px-5 py-3 border border-jet rounded-[14px] outline-none placeholder:font-medium focus:border-orange-yellow-crayola focus:invalid:border-bittersweet-shimmer md:text-base md:px-5 md:py-4" placeholder="Full name" required data-form-input>
+              <input type="email" name="email" class="form-input text-white-2 text-sm font-medium px-5 py-3 border border-jet rounded-[14px] outline-none placeholder:font-medium focus:border-orange-yellow-crayola focus:invalid:border-bittersweet-shimmer md:text-base md:px-5 md:py-4" placeholder="Email address" required data-form-input>
+            </div>
+            <textarea name="message" class="form-input text-white-2 text-sm font-medium px-5 py-3 border border-jet rounded-[14px] outline-none placeholder:font-medium focus:border-orange-yellow-crayola focus:invalid:border-bittersweet-shimmer min-h-[100px] h-[120px] max-h-[200px] resize-vertical mb-6 md:text-base md:px-5 md:py-4 md:min-h-[120px] md:h-[120px] md:max-h-[200px] md:mb-8" placeholder="Your Message" required data-form-input></textarea>
+            <button class="form-btn type:submit disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:bg-gradient-onyx disabled:hover:before:bg-gradient-jet text-sm px-5 py-3 md:text-base md:px-5 md:py-4 md:w-max md:ml-auto" type="submit" disabled data-form-btn>
+              <ion-icon name="paper-plane"></ion-icon>
+              <span>Send Message</span>
+            </button>
+            <p id="form-success" style="display:none;color:#f9bf45;margin-top:10px;">Thanks! Your message has been sent.</p>
+          </form>
+        </section>
+      </article>
+      <article class="renderer hidden" id="pageRender">
+        <button class="go_back">
+          <span>Go Back</span>
+        </button>
+        <!-- <iframe  id="render-content" allowtransparency="true" style="background: #FFFFFF;" frameborder="0" height="184" width="100%"> -->
+        <!-- </iframe> -->
+        <div id="render-content" style="display: flex; width: 80%;"></div>
+      </article>
     </div>
-
   </main>
 
 
-  <script src="./static/js/script.js"></script>
-  <!-- <script src="./static/js/index.js"></script> -->
-</body>
 
+  <!--
+    - custom js link
+  -->
+  <script src="./static/js/script.js"></script>
+  <script src="./static/js/index.js"></script>
+  <!--
+    - ionicon link
+  -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
 </html>

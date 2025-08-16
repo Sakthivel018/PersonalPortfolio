@@ -158,6 +158,22 @@ for (let i = 0; i < navigationLinks.length; i++) {
   });
 }
 
+document.querySelector('.form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  document.getElementById('form-success').style.display = 'block';
+
+  // Clear all form input values
+  formInputs.forEach(input => input.value = '');
+
+  // Disable the button again after clearing
+  formBtn.setAttribute("disabled", "");
+
+  // Hide the success message after 3 seconds
+  setTimeout(() => {
+    document.getElementById('form-success').style.display = 'none';
+  }, 3000);
+});
+
 const changeState = () => {
   const storedState = localStorage.getItem('articleState');
   if (storedState) {
