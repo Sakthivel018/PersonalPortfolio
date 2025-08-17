@@ -12,6 +12,27 @@
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--secondary) var(--primary);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  min-height: 100vh;
+  min-width: 100vw;
+  overflow-x: hidden;
+}
+
+html {
+  font-family: var(--ff-poppins);
+}
+
+body {
+  background: var(--smoky-black);
+  width: 100vw;
+  min-height: 100vh;
 }
 
 /* Chrome, Edge, and Safari */
@@ -68,6 +89,11 @@
   ), hsl(240, 2%, 13%);
   --border-gradient-onyx: linear-gradient(
     to bottom right, 
+    hsl(0, 0%, 25%) 0%, 
+    hsla(0, 0%, 25%, 0) 50%
+  );
+  --border-gradient-onyx-2: linear-gradient(
+    to top left, 
     hsl(0, 0%, 25%) 0%, 
     hsla(0, 0%, 25%, 0) 50%
   );
@@ -329,6 +355,28 @@ main {
   min-width: 259px;
 }
 
+/* Main container adjustments */
+main {
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  padding: 15px 12px;
+  padding-bottom: 75px;
+  box-sizing: border-box;
+}
+
+/* Sidebar and article base styles */
+.sidebar,
+article {
+  background: var(--eerie-black-2);
+  border: 1px solid var(--jet);
+  border-radius: 20px;
+  padding: 15px;
+  box-shadow: var(--shadow-1);
+  z-index: 1;
+  width: 100%;
+  max-width: 100%;
+}
 
 
 
@@ -1795,7 +1843,8 @@ textarea.form-input::-webkit-resizer { display: none; }
    */
 
   html {
-    min-height: 100%;
+    min-height: 100vh;
+    height: 100%;
   }
 
   article::-webkit-scrollbar { width: 15px; }
@@ -1827,28 +1876,37 @@ textarea.form-input::-webkit-resizer { display: none; }
    }
 
 
+  body {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+  }
 
   /**
    * MAIN
    */
 
   main {
-    max-width: 1400px;
-    margin-inline: 5rem;
+    max-width: 100vw;
+    width: 100vw;
+    height: 100%;
+    max-height: calc(100vh - 100px);
+    margin: 0;
+    padding: 25px;
     display: flex;
-    justify-content: center;
+    justify-content: stretch;
     align-items: stretch;
     gap: 25px;
-    margin-top: 49px !important; 
+    box-sizing: border-box;
   }
 
   .main-content {
-    min-width: 75%;
-    width: 75%;
+    width: calc(100% - 320px); /* Adjust based on sidebar width */
+    min-width: calc(100% - 320px);
     margin: 0;
-    height: 670px;
-    /* top: 15px; */
-    padding-right: 1rem !important;
+    height: calc(100vh - 50px);
+    padding-right: 0;
+    overflow: hidden;
   }
 
   .contact {
@@ -1867,15 +1925,19 @@ textarea.form-input::-webkit-resizer { display: none; }
    * SIDEBAR
    */
 
+  /* Sidebar adjustments */
   .sidebar {
     position: sticky;
-    top: 45px;
-    max-height: max-content;
-    height: 670px;
+    top: 0;
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+    min-height: calc(100vh - 50px);
     margin-bottom: 0;
-    padding-top: 60px;
-    padding: 20px 30px 15px 30px;
+    padding: 20px;
+    padding-bottom: 50px;
     z-index: 1;
+    overflow-y: auto;
   }
 
   .sidebar-info { flex-direction: column; }
@@ -1917,6 +1979,46 @@ textarea.form-input::-webkit-resizer { display: none; }
   .social-list { justify-content: center; }
 
 
+  /* Article adjustments for fullscreen */
+  article {
+    width: 100%;
+    height: 100%;
+    max-height: calc(100vh - 50px);
+    overflow-y: auto;
+    padding: 0;
+    position: relative;
+  }
+
+  /* Sticky header for desktop */
+  article header {
+    position: sticky;
+    top: 0;
+    background: var(--eerie-black-2);
+    z-index: 10;
+    padding: 20px 30px;
+    padding-bottom: 0px;
+    margin: 0;
+    border-bottom: 1px solid var(--jet);
+    backdrop-filter: blur(10px);
+  }
+  article section:not(header),
+  article .about-text {
+    padding: 20px 30px 30px 30px;
+  }
+  /* Navbar positioning */
+  .navbar {
+    position: absolute;
+    bottom: auto;
+    top: 0;
+    left: auto;
+    right: 0;
+    width: max-content;
+    border-radius: 0 0 0 20px;
+    padding: 0 20px;
+    box-shadow: none;
+    margin-right: 0;
+    z-index: 10;
+  }
 
   /**
 	 * RESUME
@@ -1995,12 +2097,12 @@ textarea.form-input::-webkit-resizer { display: none; }
 
 .go_back {
   color: var(--orange-yellow-crayola);
-  background: var(--border-gradient-onyx);
+  background: var(--border-gradient-onyx-2);
   padding: 10px;
   box-shadow: var(--shadow-2);
   transition: var(--transition-1);
   z-index: 1;
-  border-radius: 15px 0 0 0;
+  border-radius: 15px 0 15px 0;
   font-size: 13px;
 }
 

@@ -113,6 +113,24 @@ for (let i = 0; i < formInputs.length; i++) {
   });
 }
 
+// Function to scroll content to top
+const scrollToTop = function(targetPage) {
+  // Scroll the main window to top
+  window.scrollTo(0, 0);
+  
+  // Also scroll the specific article to top
+  const activeArticle = document.querySelector(`[data-page="${targetPage}"]`);
+  if (activeArticle) {
+    activeArticle.scrollTop = 0;
+  }
+  
+  // Scroll main content container to top if it exists
+  const mainContent = document.querySelector('.main-content');
+  if (mainContent) {
+    mainContent.scrollTop = 0;
+  }
+}
+
 // page navigation variables
 const navigationLinks = document.querySelectorAll("[data-nav-link]");
 const pages = document.querySelectorAll("[data-page]");
@@ -120,17 +138,37 @@ const pages = document.querySelectorAll("[data-page]");
 // add event to all nav link
 for (let i = 0; i < navigationLinks.length; i++) {
   navigationLinks[i].addEventListener("click", function () {
-    document.querySelector(`.renderer`).classList.remove("active");
+    const targetPageName = this.innerHTML.toLowerCase();
     
-    for (let i = 0; i < pages.length; i++) {
-      if (this.innerHTML.toLowerCase() === pages[i].dataset.page) {
-        pages[i].classList.add("active");
-        navigationLinks[i].classList.add("active");
-        window.scrollTo(0, 0);
-        localStorage.setItem('articleState', this.innerHTML.toLowerCase());
-      } else {
-        pages[i].classList.remove("active");
-        navigationLinks[i].classList.remove("active");
+    // Remove active class from renderer
+    document.querySelector(`.renderer`).classList.remove("active");
+      
+    // Clear the render content when switching pages
+    const renderContent = document.querySelector('#render-content');
+    if (renderContent) {
+      renderContent.innerHTML = '';
+    }
+    // Remove active class from all pages and nav links first
+    for (let j = 0; j < pages.length; j++) {
+      pages[j].classList.remove("active");
+      navigationLinks[j].classList.remove("active");
+    }
+    
+    // Add active class to clicked nav and corresponding page
+    for (let j = 0; j < pages.length; j++) {
+      if (targetPageName === pages[j].dataset.page) {
+        // Add active classes
+        pages[j].classList.add("active");
+        this.classList.add("active");
+        
+        // Scroll to top after a brief delay to ensure the page is active
+        setTimeout(() => {
+          scrollToTop(targetPageName);
+        }, 50);
+        
+        // Store state
+        localStorage.setItem('articleState', targetPageName);
+        break;
       }
     }
   });
@@ -139,8 +177,34 @@ for (let i = 0; i < navigationLinks.length; i++) {
 const changeState = () => {
   const storedState = localStorage.getItem('articleState');
   if (storedState) {
-    document.querySelector(`[load-page="${storedState}"]`).click();
+    const targetButton = document.querySelector(`[load-page="${storedState}"]`);
+    if (targetButton) {
+      targetButton.click();
+      // Ensure scroll to top after state change
+      setTimeout(() => {
+        scrollToTop(storedState);
+      }, 100);
+    }
   }
 };
 
-window.onload = changeState();
+// Enhanced window load event
+window.addEventListener('load', function() {
+  changeState();
+  // Additional scroll to top on page load
+  setTimeout(() => {
+    window.scrollTo(0, 0);
+  }, 200);
+});
+
+// Also handle page visibility changes (when user returns to tab)
+document.addEventListener('visibilitychange', function() {
+  if (!document.hidden) {
+    const currentActive = document.querySelector('article.active');
+    if (currentActive) {
+      setTimeout(() => {
+        scrollToTop(currentActive.dataset.page);
+      }, 100);
+    }
+  }
+});
