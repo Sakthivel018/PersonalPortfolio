@@ -835,14 +835,14 @@ article {
   #RESUME
 \*-----------------------------------*/
 
-.article-title { margin-bottom: 30px; }
+/* .article-title { margin-bottom: 30px; } */
 
 
 /**
  * education and experience 
  */
 
-.timeline { margin-bottom: 30px; }
+/* .timeline { margin-bottom: 30px; } */
 
 .timeline .title-wrapper {
   display: flex;
@@ -1239,7 +1239,7 @@ article {
 
 textarea.form-input {
   min-height: 100px;
-  height: 120px;
+  height: 200px;
   max-height: 200px;
   resize: vertical;
   margin-bottom: 25px;
@@ -1458,7 +1458,7 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   .about .article-title { margin-bottom: 20px; }
 
-  .about-text { margin-bottom: 40px; }
+  /* .about-text { margin-bottom: 40px; } */
 
   /* service */
 
