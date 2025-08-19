@@ -266,11 +266,16 @@ fetch(`${apiURL}?q=Projects`)
 
 // Show details function
 const showDetails = (type, href) => {
+  // Clear the render content when switching pages
+  const renderContent = document.querySelector('#render-content');
+  if (renderContent) {
+    renderContent.innerHTML = '';
+  }
   document.getElementById("loader").style.display = "flex";
-  document.querySelector(".go_back").removeEventListener('click', () => {
-    document.querySelector(`.renderer`).classList.remove("active");
-    document.querySelector(`.${type}`).classList.add("active");
-  });
+  // document.querySelector(".go_back").removeEventListener('click', () => {
+  //   document.querySelector(`.renderer`).classList.remove("active");
+  //   document.querySelector(`.${type}`).classList.add("active");
+  // });
   
   hideArticles('renderer');
   
@@ -282,10 +287,10 @@ const showDetails = (type, href) => {
       document.getElementById("loader").style.display = "none";
     });
     
-  document.querySelector(".go_back").addEventListener('click', () => {
-    document.querySelector(`.renderer`).classList.remove("active");
-    document.querySelector(`.${type}`).classList.add("active");
-  });
+  // document.querySelector(".go_back").addEventListener('click', () => {
+  //   document.querySelector(`.renderer`).classList.remove("active");
+  //   document.querySelector(`.${type}`).classList.add("active");
+  // });
 };
 
 // Hide articles function
@@ -300,3 +305,33 @@ const hideArticles = className => {
     localStorage.setItem('articleState', className);
   }
 };
+
+document.querySelector('.go_back').addEventListener('click', function() {
+  // Hide the renderer
+  document.querySelector('.renderer').classList.remove('active');
+  
+  // Clear the render content
+  const renderContent = document.querySelector('#render-content');
+  if (renderContent) {
+    renderContent.innerHTML = '';
+  }
+  
+  // Get the currently active navigation link to determine which section to show
+  const activeNavLink = document.querySelector('.navbar-link.active');
+  if (activeNavLink) {
+    const targetPage = activeNavLink.getAttribute('load-page') || activeNavLink.innerHTML.toLowerCase();
+    
+    // Hide all pages first
+    const allPages = document.querySelectorAll('[data-page]');
+    allPages.forEach(page => page.classList.remove('active'));
+    
+    // Show only the target page
+    const targetPageElement = document.querySelector(`[data-page="${targetPage}"]`);
+    if (targetPageElement) {
+      targetPageElement.classList.add('active');
+    }
+  }
+  
+  // Scroll to top
+  window.scrollTo(0, 0);
+});
