@@ -835,14 +835,14 @@ article {
   #RESUME
 \*-----------------------------------*/
 
-.article-title { margin-bottom: 30px; }
+/* .article-title { margin-bottom: 30px; } */
 
 
 /**
  * education and experience 
  */
 
-.timeline { margin-bottom: 30px; }
+/* .timeline { margin-bottom: 30px; } */
 
 .timeline .title-wrapper {
   display: flex;
@@ -1239,7 +1239,7 @@ article {
 
 textarea.form-input {
   min-height: 100px;
-  height: 120px;
+  height: 200px;
   max-height: 200px;
   resize: vertical;
   margin-bottom: 25px;
@@ -1458,7 +1458,7 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   .about .article-title { margin-bottom: 20px; }
 
-  .about-text { margin-bottom: 40px; }
+  /* .about-text { margin-bottom: 40px; } */
 
   /* service */
 
@@ -1830,6 +1830,9 @@ textarea.form-input::-webkit-resizer { display: none; }
 
 
 
+  .projects, .blog-posts {
+    padding-top: 20px;
+  }
 
 
 /**
@@ -1914,10 +1917,6 @@ textarea.form-input::-webkit-resizer { display: none; }
   }
 
   .blog {
-    height: 100%;
-  }
-
-  .projects {
     height: 100%;
   }
 
@@ -2109,4 +2108,157 @@ textarea.form-input::-webkit-resizer { display: none; }
 #render-content {
   width: 100%;
   height: 100%;
+}
+
+/* Fix for rendered content container */
+#render-content {
+  width: 100%;
+  height: calc(100% - 40px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+/* Override styles for rendered HTML content */
+#render-content body {
+  all: revert !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 20px !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+  background-color: transparent !important;
+}
+
+#render-content main {
+  all: revert !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+#render-content article {
+  all: revert !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  text-align: left !important;
+}
+
+/* Responsive fixes for mobile and tablet */
+@media (max-width: 768px) {
+  #render-content {
+    padding: 10px;
+  }
+  
+  #render-content body {
+    padding: 0 10px !important;
+  }
+  
+  #render-content h1,
+  #render-content h2 {
+    font-size: clamp(1.2rem, 4vw, 2rem) !important;
+    word-wrap: break-word !important;
+  }
+  
+  #render-content p {
+    font-size: clamp(0.9rem, 3vw, 1rem) !important;
+    word-wrap: break-word !important;
+    line-height: 1.5 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #render-content {
+    padding: 5px;
+  }
+  
+  #render-content body {
+    padding: 0 5px !important;
+  }
+}
+
+.blog-post-item, .project-item {
+  cursor: pointer;
+}
+
+/* Fix text colors for rendered HTML content */
+#render-content,
+#render-content *,
+#render-content body,
+#render-content main,
+#render-content article,
+#render-content div,
+#render-content p,
+#render-content span,
+#render-content li,
+#render-content td,
+#render-content th {
+  color: var(--white-2) !important;
+}
+
+/* Keep headings with the existing yellow color */
+#render-content h1,
+#render-content h2,
+#render-content h3,
+#render-content h4,
+#render-content h5,
+#render-content h6 {
+  color: var(--vegas-gold) !important;
+}
+
+/* Ensure links are visible */
+#render-content a {
+  color: var(--orange-yellow-crayola) !important;
+}
+
+#render-content a:hover {
+  color: var(--light-gray) !important;
+}
+
+/* Fix pre tag overflow in rendered content */
+#render-content pre {
+  background: var(--eerie-black-1) !important;
+  color: var(--light-gray) !important;
+  padding: 15px !important;
+  border-radius: 8px !important;
+  border: 1px solid var(--jet) !important;
+  overflow-x: auto !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  font-family: 'Courier New', monospace !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  margin: 10px 0 !important;
+}
+
+/* For mobile devices - even more constrained */
+@media (max-width: 768px) {
+  #render-content pre {
+    font-size: 12px !important;
+    padding: 10px !important;
+    white-space: pre-wrap !important;
+    overflow-wrap: break-word !important;
+    word-break: break-all !important;
+  }
+}
+
+/* Handle code blocks inside pre */
+#render-content pre code {
+  color: inherit !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+  white-space: inherit !important;
+  word-wrap: inherit !important;
 }
