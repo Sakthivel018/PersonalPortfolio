@@ -1,0 +1,74 @@
+name: Deploy portfolio to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Validate endpoint and assemble public site
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PYCODE'
+          from pathlib import Path
+          import re
+          from urllib.parse import urlparse
+
+          source = Path("static/js/portfolio.js").read_text()
+          match = re.search(r"^const API_URL = ['\"]([^'\"]*)['\"];$", source, re.MULTILINE)
+          if not match or not match.group(1):
+              raise SystemExit("Set API_URL to the verified public Apps Script /exec URL before deploying.")
+
+          endpoint = match.group(1)
+          parsed = urlparse(endpoint)
+          if (parsed.scheme != "https" or parsed.netloc != "script.google.com"
+                  or not re.fullmatch(r"/macros/s/[^/]+/exec", parsed.path)
+                  or parsed.query or parsed.fragment):
+              raise SystemExit("API_URL must be an HTTPS script.google.com/macros/s/<deployment-id>/exec URL.")
+          PYCODE
+
+          site_dir="$RUNNER_TEMP/portfolio-site"
+          mkdir -p "$site_dir/static/css" "$site_dir/static/js" \
+            "$site_dir/static/data" "$site_dir/static/images/new"
+          cp index.html "$site_dir/index.html"
+          cp static/css/portfolio.css "$site_dir/static/css/portfolio.css"
+          cp static/js/portfolio.js "$site_dir/static/js/portfolio.js"
+          cp static/data/site-config.js "$site_dir/static/data/site-config.js"
+          cp static/data/preview-data.js "$site_dir/static/data/preview-data.js"
+          cp static/images/new/favicon-img-dark.svg \
+            "$site_dir/static/images/new/favicon-img-dark.svg"
+
+      - name: Upload the allowlisted site artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ runner.temp }}/portfolio-site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
