@@ -144,7 +144,7 @@ function renderExperience(items) {
     if (item.description) row.append(make('p', '', item.description));
     list.append(row);
   });
-  if (!list.childElementCount) list.append(make('p', 'loading-text', 'Experience details are managed through the connected portfolio data source.'));
+  if (!list.childElementCount) list.append(make('p', 'empty-state', 'Experience details are managed through the connected portfolio data source.'));
 }
 function renderEducation(items) {
   const list = $('#education-list');
@@ -156,13 +156,14 @@ function renderEducation(items) {
     if (item.description) row.append(make('p', '', item.description));
     list.append(row);
   });
-  if (!list.childElementCount) list.append(make('p', 'loading-text', 'Education details are managed through the connected portfolio data source.'));
+  if (!list.childElementCount) list.append(make('p', 'empty-state', 'Education details are managed through the connected portfolio data source.'));
 }
 function renderSkills(items) {
   const list = $('#skill-list');
   list.replaceChildren();
   const names = asArray(items).filter(isVisible).map((item) => readText(item && (item.name || item.title))).filter(Boolean);
   [...new Set(names)].slice(0, 16).forEach((name) => list.append(make('span', 'skill-pill', name)));
+  if (!list.childElementCount) list.append(make('span', 'skill-empty', 'Skills are managed through the connected portfolio data source.'));
 }
 function renderCertifications(items) {
   const list = $('#certification-list');
@@ -174,7 +175,7 @@ function renderCertifications(items) {
     row.append(make('h3', '', readText(item.title) || 'Professional certification'));
     list.append(row);
   });
-  if (!list.childElementCount) list.append(make('p', 'loading-text', 'Certifications are managed through the connected portfolio data source.'));
+  if (!list.childElementCount) list.append(make('p', 'empty-state', 'Certifications are managed through the connected portfolio data source.'));
 }
 function renderBlogs(items) {
   const list = $('#blog-list');
@@ -235,6 +236,7 @@ async function load(query, render) {
     if (query === 'Blogs') renderBlogs([]);
     if (query === 'Experience') renderExperience([]);
     if (query === 'Education') renderEducation([]);
+    if (query === 'Skills') renderSkills([]);
     if (query === 'Certifications') renderCertifications([]);
   }
 }
