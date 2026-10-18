@@ -1,46 +1,55 @@
-# Sakthivel Raja — GenAI Engineer Portfolio
+# Sakthivel Raja
 
-A responsive, static portfolio focused on GenAI engineering: agentic workflows, RAG, document intelligence, and reliable AI backends. The site is designed for GitHub Pages and reads portfolio content from the existing Google Sheets-backed Apps Script API.
+### GenAI Engineer · Chennai, India
 
-## Run locally
+I build AI features that have to work as part of a larger software system. My recent work has focused on document intelligence, structured extraction, retrieval, and agent workflows. I came to this through backend and data engineering, so I tend to think about the APIs, state, and checks around a model as carefully as the model call itself.
 
-Serve the repository root with any static HTTP server, then open the local URL. For example:
+My work has moved from Python, ETL, and APIs toward LLM applications and, more recently, stateful agent systems. That progression still shapes how I build: understand the workflow first, use a model where it helps, and make the result clear enough to validate and use downstream.
 
-```sh
-python3 -m http.server 8000
-```
+## Selected work
 
-Open `http://localhost:8000/?preview=1` to view the isolated local preview data. Opening `index.html` as a `file://` URL also enables that preview automatically. The preview fixture is separate from Google Sheets and is never used on the hosted page unless `?preview=1` is added.
+### Insurance document extraction and validation
 
-There is no framework build step. The active page is `index.html`; its stylesheet and behavior live in `static/css/portfolio.css` and `static/js/portfolio.js`.
+Built stages for extracting, validating, and enriching information from complex insurance documents. The workflow combined LangGraph, structured outputs, and deterministic checks to catch missing, malformed, or conflicting values before they moved downstream.
 
-## Deployment
+### Agentic product attribute extraction
 
-[`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) deploys only after changes reach `main`. It builds an explicit allowlist containing `index.html`, the active CSS and JavaScript, the site configuration, the preview fixture, and the favicon. It does not upload `node_modules`, README files, project notes, API documentation, or `master_data.md`.
+Worked on a proof of concept for extracting product attributes through coordinated agent steps. The design included structured results, queued processing, and a human review path for uncertain cases.
 
-Before the first deployment, set **Settings → Pages → Build and deployment → Source** to **GitHub Actions**. The workflow stops if `API_URL` is empty or is not an HTTPS Apps Script `/exec` URL. Before merging a release to `main`, verify directly that the endpoint returns only approved public fields; the workflow cannot establish that a public API response is safe. The published website is public, and its HTML, CSS, JavaScript, configuration, preview fixture, and displayed data can be inspected by visitors. GitHub Pages from a private source repository requires an eligible GitHub plan.
+### Automotive parts intelligence
 
-## Content source
+Developed an AI workflow around automotive parts information, bringing together retrieval, semantic search, and image grading to help organize and assess product data.
 
-The Apps Script endpoint remains the content source. The website requests `Profile`, `Projects`, `Experience`, `Education`, `Skills`, `Certifications`, and `Blogs` through a read-only JSONP callback. It does not update or write to Google Sheets. Configure the opening copy and personal-project grouping in [static/data/site-config.js](static/data/site-config.js); control which sheet rows appear with their `visible` checkboxes.
+### Document and financial data workflows
 
-**Security gate:** before publishing, deploy the allowlisted, fixed-callback implementation in [docs/portfolio_api.gs](docs/portfolio_api.gs). In particular, the public `Profile` response must not contain `ph_no`, email, birthday, or other private fields. A static GitHub Pages site cannot conceal data returned by a public endpoint. Do not publish until direct endpoint checks confirm that only checked rows and allowlisted fields are returned and old detail routes no longer expose data.
+Earlier projects included document intelligence and RAG, invoice extraction, and bank-statement processing. These systems paired Python APIs and data pipelines with language models to turn unstructured documents into information that business workflows could use.
 
-## Privacy and security
+### Conversational and voice interfaces
 
-- The page has no email address, phone number, `mailto:` link, or `tel:` link.
-- Sheet values are rendered as text nodes; they are not treated as HTML or executable script.
-- Links from the data source are limited to HTTP(S), and external links use `noopener noreferrer`.
-- The page uses a restrictive Content Security Policy meta tag and does not load third-party scripts, fonts, or icon libraries.
-- Keep the spreadsheet private. Only the explicitly projected, public fields should be served by Apps Script.
+Built LLM-based document question-answering and conversational applications, along with an early voice-to-email workflow that turned spoken instructions into draft messages.
 
-## Main files
+*Project summaries are intentionally general and omit client-confidential details.*
 
-- `index.html` — only portfolio page/entry point.
-- `static/css/portfolio.css` — layout, visual system, and responsive styles.
-- `static/js/portfolio.js` — safe, read-only loading and rendering of the Sheets-backed content.
-- `static/data/preview-data.js` — local-only sample content for reviewing the page before the safe API is deployed.
-- `static/data/site-config.js` — public presentation settings and project grouping.
-- `docs/APPS_SCRIPT_PUBLIC_API.md` — required server-side API projection and deployment checks.
-- `docs/PORTFOLIO_CONFIGURATION.md` — how to update site framing and showcase personal projects.
-- `master_data.md` — career source material; it is not loaded by the live page.
+## How I approach the work
+
+- Start with the task, the data it depends on, and what can go wrong.
+- Give model steps clear inputs and structured outputs.
+- Use ordinary code for rules that should be predictable.
+- Make uncertain results reviewable by a person.
+- Treat the API and the downstream handoff as part of the AI feature.
+
+## What I work with
+
+Python · FastAPI · LangGraph · LangChain · RAG · OpenAI · Azure OpenAI · Pydantic · MongoDB · PostgreSQL · Azure · AWS
+
+## A few self-directed builds
+
+- **Document extraction workbench** — extract information from PDFs and images, review it, and export structured CSV or Excel data.
+- **AI-assisted ETL with a chatbot** — extract information from unstructured documents, store it, and query it conversationally.
+- **Voice-based email helper** — turn spoken, multilingual instructions into email drafts.
+
+## The portfolio
+
+The live portfolio brings together selected work, side projects, my engineering approach, and career history.
+
+[View the portfolio](https://sakthivel018.github.io/PersonalPortfolio/)

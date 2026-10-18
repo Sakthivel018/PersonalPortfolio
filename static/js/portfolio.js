@@ -3,8 +3,6 @@
 // Public read-only Apps Script deployment. Its response fields must remain
 // allowlisted; never expose phone, email, birthday, or other private fields.
 const API_URL = 'https://script.google.com/macros/s/AKfycbx7yh21tAcxNNoEN7nbYo-24EeJijiXi4cTn71ON200JEdsabMsZZayI-Nci7AnAq0d/exec';
-const JSONP_CALLBACK_PREFIX = 'portfolioJsonp_';
-let jsonpRequestId = 0;
 const PREVIEW_MODE = new URLSearchParams(window.location.search).get('preview') === '1' || window.location.protocol === 'file:';
 const CONFIG = window.PORTFOLIO_CONFIG || {};
 let previewDataPromise;
@@ -41,7 +39,7 @@ async function fetchSheet(query) {
     return previewData[query] ?? [];
   }
   if (!API_URL) throw new Error('Safe Apps Script endpoint is not configured');
-  const payload = await fetchSheetJSONP(query);
+  const payload = await fetchSheetJSON(query);
   if (!payload || payload.ok !== true || payload.query !== query || !Object.prototype.hasOwnProperty.call(payload, 'data')) {
     throw new Error(readText(payload && payload.error) || 'Portfolio API returned an invalid response');
   }
@@ -54,34 +52,36 @@ async function fetchSheet(query) {
   }
   return data;
 }
-function fetchSheetJSONP(query) {
-  return new Promise((resolve, reject) => {
-    const callbackName = `${JSONP_CALLBACK_PREFIX}${++jsonpRequestId}`;
-    const url = new URL(API_URL);
-    url.searchParams.set('query', query);
-    url.searchParams.set('callback', callbackName);
-    const script = document.createElement('script');
-    let settled = false;
-    const finish = (error, value) => {
-      if (settled) return;
-      settled = true;
-      window.clearTimeout(timeoutId);
-      delete window[callbackName];
-      script.remove();
-      if (error) reject(error);
-      else resolve(value);
-    };
-    const timeoutId = window.setTimeout(() => finish(new Error('Portfolio API request timed out')), 15000);
-    window[callbackName] = (value) => finish(null, value);
-    script.async = true;
-    script.referrerPolicy = 'no-referrer';
-    script.onerror = () => finish(new Error('Portfolio API could not be loaded'));
-    script.onload = () => {
-      if (!settled) finish(new Error('Portfolio API must be redeployed with the documented JSONP response.'));
-    };
-    script.src = url.href;
-    document.head.append(script);
-  });
+async function fetchSheetJSON(query) {
+  const url = new URL(API_URL);
+  url.searchParams.set('query', query);
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), 15000);
+  try {
+    const response = await fetch(url.href, {
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'omit',
+      redirect: 'follow',
+      cache: 'no-store',
+      headers: { Accept: 'application/json' },
+      signal: controller.signal
+    });
+    if (!response.ok) throw new Error(`Portfolio API returned HTTP ${response.status}`);
+    const contentType = response.headers.get('content-type') || '';
+    if (!/^application\/json(?:\s*;|$)/i.test(contentType)) {
+      throw new Error(`Portfolio API returned an unexpected content type: ${contentType || 'missing'}`);
+    }
+    return await response.json();
+  } catch (error) {
+    if (error.name === 'AbortError') throw new Error('Portfolio API request timed out');
+    if (error instanceof TypeError) {
+      throw new Error('Portfolio API request was blocked or could not be reached; verify the endpoint CORS headers and deployment access');
+    }
+    throw error;
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
 }
 function asArray(value) { return Array.isArray(value) ? value : []; }
 function isVisible(item) {
