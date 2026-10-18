@@ -9,7 +9,12 @@ window.PORTFOLIO_CONFIG = Object.freeze({
     role: 'GenAI Engineer',
     location: 'Chennai, India',
     headline: 'First the APIs.\nNow the agents.',
-    introduction: 'I work on the parts that make AI useful in a real workflow: getting information out of difficult documents, keeping multi-step systems on track, and checking the result before it moves on.'
+    introduction: 'Most of my GenAI work starts with documents: extracting information, finding evidence, and keeping multi-step workflows reliable when the source is messy. I build the Python services, validation, and review paths around the model too.'
+  },
+  // Public profile destinations live here so they can be changed centrally
+  // without touching the Google Sheets content.
+  links: {
+    github: 'https://github.com/Sakthivel018'
   },
   presentation: {
     showPersonalProjects: true,

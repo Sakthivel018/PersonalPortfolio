@@ -3,6 +3,8 @@
 // Public read-only Apps Script deployment. Its response fields must remain
 // allowlisted; never expose phone, email, birthday, or other private fields.
 const API_URL = 'https://script.google.com/macros/s/AKfycbx7yh21tAcxNNoEN7nbYo-24EeJijiXi4cTn71ON200JEdsabMsZZayI-Nci7AnAq0d/exec';
+const API_QUERIES = new Set(['Profile', 'Projects', 'Experience', 'Education', 'Skills', 'Certifications', 'Blogs']);
+const API_RESPONSE_LIMIT = 1024 * 1024;
 const PREVIEW_MODE = new URLSearchParams(window.location.search).get('preview') === '1' || window.location.protocol === 'file:';
 const CONFIG = window.PORTFOLIO_CONFIG || {};
 let previewDataPromise;
@@ -19,14 +21,17 @@ const safeURL = (value, { image = false } = {}) => {
   if (!raw) return '';
   try {
     const url = new URL(raw, window.location.href);
-    const allowed = ['https:', 'http:'];
-    if (!(image && /^(\.\.\/|\.\/|\/)/.test(raw)) && !/^https?:\/\//i.test(raw)) return '';
-    if (!allowed.includes(url.protocol)) return '';
-    if ((url.protocol === 'http:') && window.location.protocol === 'https:') return '';
+    const localImagePath = image && /^(\.\.\/|\.\/|\/(?!\/))/.test(raw);
+    if (!localImagePath && !/^https:\/\//i.test(raw)) return '';
+    const authority = raw.match(/^https:\/\/([^/?#]*)/i)?.[1] || '';
+    if ((!localImagePath && url.protocol !== 'https:') || authority.includes('@') || url.username || url.password) return '';
+    if (!localImagePath && url.hostname.toLowerCase() !== 'github.com') return '';
+    if (localImagePath && url.protocol !== window.location.protocol) return '';
     return url.href;
   } catch (_) { return ''; }
 };
 async function fetchSheet(query) {
+  if (!API_QUERIES.has(query)) throw new Error('Unsupported portfolio data request');
   if (PREVIEW_MODE) {
     previewDataPromise ||= new Promise((resolve, reject) => {
       const script = document.createElement('script');
@@ -68,11 +73,24 @@ async function fetchSheetJSON(query) {
       signal: controller.signal
     });
     if (!response.ok) throw new Error(`Portfolio API returned HTTP ${response.status}`);
+    const finalURL = new URL(response.url);
+    if (finalURL.protocol !== 'https:' || !['script.google.com', 'script.googleusercontent.com'].includes(finalURL.hostname.toLowerCase())) {
+      throw new Error('Portfolio API redirected to an untrusted host');
+    }
     const contentType = response.headers.get('content-type') || '';
     if (!/^application\/json(?:\s*;|$)/i.test(contentType)) {
       throw new Error(`Portfolio API returned an unexpected content type: ${contentType || 'missing'}`);
     }
-    return await response.json();
+    const contentLength = Number(response.headers.get('content-length'));
+    if (Number.isFinite(contentLength) && contentLength > API_RESPONSE_LIMIT) {
+      throw new Error('Portfolio API response exceeded the size limit');
+    }
+    const body = await response.text();
+    if (new TextEncoder().encode(body).byteLength > API_RESPONSE_LIMIT) {
+      throw new Error('Portfolio API response exceeded the size limit');
+    }
+    try { return JSON.parse(body); }
+    catch (_) { throw new Error('Portfolio API returned invalid JSON'); }
   } catch (error) {
     if (error.name === 'AbortError') throw new Error('Portfolio API request timed out');
     if (error instanceof TypeError) {
@@ -100,6 +118,22 @@ function makeLink(label, href, className = '') {
   }
   return link;
 }
+function appendProjectSummary(element, value) {
+  const text = readText(value);
+  const metrics = [...text.matchAll(/(?:approximately\s+|~)?\d+(?:\.\d+)?%/gi)];
+  if (!metrics.length) {
+    element.textContent = text;
+    return;
+  }
+  let offset = 0;
+  metrics.forEach((match) => {
+    const start = match.index;
+    if (start > offset) element.append(document.createTextNode(text.slice(offset, start)));
+    element.append(make('mark', 'metric-highlight', match[0]));
+    offset = start + match[0].length;
+  });
+  if (offset < text.length) element.append(document.createTextNode(text.slice(offset)));
+}
 function normalizeProjectTitle(value) { return readText(value).toLocaleLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); }
 function renderProjectGroup(items, list, group) {
   list.replaceChildren();
@@ -111,7 +145,7 @@ function renderProjectGroup(items, list, group) {
   });
   if (!projects.length) {
     if (group === 'personal' && !(CONFIG.presentation && CONFIG.presentation.showPersonalProjects)) return;
-    list.append(make('p', 'empty-state', group === 'personal' ? 'Side projects will show here when their rows are added to the Projects data and listed in site-config.js.' : 'Project details will appear here when the portfolio data is connected.'));
+    list.append(make('p', 'empty-state', group === 'personal' ? 'No side projects are selected for display right now.' : 'No work projects are selected for display right now.'));
     return;
   }
   projects.forEach((item, index) => {
@@ -120,11 +154,25 @@ function renderProjectGroup(items, list, group) {
     const main = make('div', 'project-main');
     main.append(make('h3', '', readText(item.header) || readText(item.title) || 'Project'));
     const summary = readText(item.description) || readText(item.sub_title);
-    if (summary) main.append(make('p', 'project-summary', summary));
+    if (summary) {
+      const summaryElement = make('p', 'project-summary');
+      appendProjectSummary(summaryElement, summary);
+      main.append(summaryElement);
+    }
     const tags = make('div', 'project-tags');
     const subtitle = readText(item.sub_title);
     if (subtitle && subtitle !== summary) subtitle.split(/[,|·]/).slice(0, 3).forEach((tag) => { if (tag.trim()) tags.append(make('span', 'project-tag', tag.trim())); });
     if (tags.childElementCount) main.append(tags);
+    const destination = safeURL(item.href);
+    if (destination) {
+      const action = make('a', 'project-action', 'View project');
+      action.href = destination;
+      action.target = '_blank';
+      action.rel = 'noopener noreferrer';
+      action.setAttribute('aria-label', `View ${readText(item.header || item.title) || 'project'} in a new tab`);
+      action.append(document.createTextNode(' ↗'));
+      main.append(action);
+    }
     row.append(main);
     row.append(make('span', 'project-category', readText(item.category)));
     list.append(row);
@@ -144,7 +192,7 @@ function renderExperience(items) {
     if (item.description) row.append(make('p', '', item.description));
     list.append(row);
   });
-  if (!list.childElementCount) list.append(make('p', 'empty-state', 'Experience details are managed through the connected portfolio data source.'));
+  if (!list.childElementCount) list.append(make('p', 'empty-state', 'No experience entries are selected for display right now.'));
 }
 function renderEducation(items) {
   const list = $('#education-list');
@@ -156,14 +204,14 @@ function renderEducation(items) {
     if (item.description) row.append(make('p', '', item.description));
     list.append(row);
   });
-  if (!list.childElementCount) list.append(make('p', 'empty-state', 'Education details are managed through the connected portfolio data source.'));
+  if (!list.childElementCount) list.append(make('p', 'empty-state', 'No education entries are selected for display right now.'));
 }
 function renderSkills(items) {
   const list = $('#skill-list');
   list.replaceChildren();
   const names = asArray(items).filter(isVisible).map((item) => readText(item && (item.name || item.title))).filter(Boolean);
   [...new Set(names)].slice(0, 16).forEach((name) => list.append(make('span', 'skill-pill', name)));
-  if (!list.childElementCount) list.append(make('span', 'skill-empty', 'Skills are managed through the connected portfolio data source.'));
+  if (!list.childElementCount) list.append(make('span', 'skill-empty', 'No skills are selected for display right now.'));
 }
 function renderCertifications(items) {
   const list = $('#certification-list');
@@ -175,7 +223,7 @@ function renderCertifications(items) {
     row.append(make('h3', '', readText(item.title) || 'Professional certification'));
     list.append(row);
   });
-  if (!list.childElementCount) list.append(make('p', 'empty-state', 'Certifications are managed through the connected portfolio data source.'));
+  if (!list.childElementCount) list.append(make('p', 'empty-state', 'No certifications are selected for display right now.'));
 }
 function renderBlogs(items) {
   const list = $('#blog-list');
@@ -198,9 +246,8 @@ function renderBlogs(items) {
     list.append(card);
   });
 }
-function renderProfile(data) {
-  if (!data || typeof data !== 'object' || Array.isArray(data)) return;
-  const name = readText(data.name);
+function applyIdentity(data = {}) {
+  const name = readText(data && data.name);
   const identity = CONFIG.identity || {};
   const displayName = readText(identity.displayName) || name;
   if (displayName) document.querySelectorAll('.brand').forEach((brand) => { brand.firstChild.textContent = displayName; });
@@ -217,6 +264,10 @@ function renderProfile(data) {
   if (introduction) $('.intro-copy').textContent = introduction;
   const location = readText(identity.location);
   if (location) $('.intro-label').lastChild.textContent = ` ${location.toLocaleUpperCase()} · CURRENTLY AT ASPIRE SYSTEMS`;
+}
+function renderProfile(data) {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return;
+  applyIdentity(data);
   const aboutValue = data.about_me;
   const about = Array.isArray(aboutValue)
     ? aboutValue.map(readText).filter(Boolean)
@@ -228,16 +279,57 @@ function renderProfile(data) {
     copy.replaceChildren(...about.map((paragraph) => make('p', '', paragraph)));
   }
 }
+function applyProfileLinks() {
+  const links = CONFIG.links || {};
+  document.querySelectorAll('[data-profile-link]').forEach((link) => {
+    const key = link.getAttribute('data-profile-link');
+    const url = safeURL(links[key]);
+    if (!url) {
+      link.removeAttribute('href');
+      link.removeAttribute('target');
+      link.removeAttribute('rel');
+      link.setAttribute('aria-disabled', 'true');
+      return;
+    }
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.removeAttribute('aria-disabled');
+  });
+}
 async function load(query, render) {
   try { render(await fetchSheet(query)); }
   catch (error) {
     console.warn(`Unable to load ${query} content:`, error.message);
-    if (query === 'Projects') renderProjects([]);
+    const labels = {
+      Projects: ['work projects', 'side projects'],
+      Experience: ['experience'],
+      Education: ['education'],
+      Skills: ['skills'],
+      Certifications: ['certifications']
+    };
+    const targets = {
+      Projects: [$('#project-list'), $('#personal-project-list')],
+      Experience: [$('#experience-list')],
+      Education: [$('#education-list')],
+      Skills: [$('#skill-list')],
+      Certifications: [$('#certification-list')]
+    };
+    (targets[query] || []).forEach((target, index) => {
+      const state = make('div', 'error-state');
+      state.setAttribute('role', 'status');
+      state.append(make('p', '', `Couldn’t load ${labels[query][index] || query.toLowerCase()} right now.`));
+      const retry = make('button', 'retry-button', 'Try again');
+      retry.type = 'button';
+      retry.addEventListener('click', async () => {
+        retry.disabled = true;
+        retry.textContent = 'Trying again…';
+        await load(query, render);
+      }, { once: true });
+      state.append(retry);
+      target.replaceChildren(state);
+    });
     if (query === 'Blogs') renderBlogs([]);
-    if (query === 'Experience') renderExperience([]);
-    if (query === 'Education') renderEducation([]);
-    if (query === 'Skills') renderSkills([]);
-    if (query === 'Certifications') renderCertifications([]);
   }
 }
 function setupNavigation() {
@@ -250,10 +342,25 @@ function setupNavigation() {
     menu.hidden = expanded;
   });
   menu.addEventListener('click', (event) => {
-    if (event.target.closest('a')) { menu.hidden = true; toggle.setAttribute('aria-expanded', 'false'); toggle.setAttribute('aria-label', 'Open navigation'); }
+    if (event.target.closest('a')) {
+      menu.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open navigation');
+      toggle.focus();
+    }
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !menu.hidden) {
+      menu.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open navigation');
+      toggle.focus();
+    }
   });
 }
 function run() {
+  applyProfileLinks();
+  applyIdentity();
   setupNavigation();
   if (!(CONFIG.presentation && CONFIG.presentation.showPersonalProjects)) {
     $('#personal').hidden = true;
