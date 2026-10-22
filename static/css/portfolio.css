@@ -138,7 +138,6 @@ a { color: inherit; }
 .site-footer p, .site-footer > a:last-child, .footer-links a { margin: 0; color: var(--muted); font-size: 11px; text-decoration: none; }
 .footer-links { display: flex; align-items: center; gap: 18px; }
 .footer-links a:hover { color: var(--accent); }
-.preview-banner { max-width: 1200px; padding: 8px 44px 14px; margin: 0 auto; color: var(--muted); font: 8px var(--mono); text-align: right; }
 
 @media (max-width: 720px) {
   html { scroll-padding-top: 65px; }
@@ -181,6 +180,81 @@ a { color: inherit; }
   .site-footer { min-height: 64px; padding: 12px 21px; gap: 9px; flex-wrap: wrap; }
   .site-footer p { order: 3; width: 100%; }
   .footer-links { margin-left: auto; gap: 13px; }
-  .preview-banner { padding: 8px 21px 14px; text-align: center; }
+}
+/* Give the desktop layout more room and make small copy comfortable at laptop scale. */
+@media (min-width: 721px) {
+  :root { --width: 1480px; }
+  body { font-size: 17px; }
+  .site-header, .site-footer { max-width: 1560px; padding-right: 56px; padding-left: 56px; }
+  .primary-nav { gap: 32px; }
+  .primary-nav a { font-size: 14px; }
+  .page-shell { padding-right: 52px; padding-left: 52px; }
+  .intro { column-gap: 72px; }
+  .intro-label, .section-kicker { font-size: 11px; }
+  .intro-copy { max-width: 620px; font-size: 17px; line-height: 1.75; }
+  .intro-link { font-size: 13px; }
+  .career-sketch { padding: 30px 30px 32px 34px; }
+  .sketch-caption, .sketch-year, .sketch-step b { font-size: 10px; }
+  .sketch-caption { margin-bottom: 21px; }
+  .sketch-step { grid-template-columns: 92px 14px 1fr; column-gap: 12px; row-gap: 10px; min-height: 0; align-items: start; }
+  .sketch-year, .sketch-line { grid-row: 1 / span 2; }
+  .sketch-step p { grid-row: 1; margin: 0; font-size: 20px; }
+  .sketch-step b { grid-row: 2; align-self: start; }
+  .sketch-line { min-height: 0; }
+  .section-description { max-width: 410px; font-size: 15px; line-height: 1.7; }
+  .project-row { grid-template-columns: 52px minmax(0, 1fr) 160px; gap: 21px; padding: 25px 10px 27px 0; }
+  .project-number { font-size: 11px; }
+  .project-main h3 { font-size: 25px; }
+  .project-summary { max-width: 900px; font-size: 16px; line-height: 1.7; }
+  .project-category { font-size: 12px; }
+  .project-tags { gap: 8px; margin-top: 12px; }
+  .project-tag { padding: 3px 9px; font-size: 11px; }
+  .loading-text, .empty-state { font-size: 14px; }
+  .about-section { margin-right: -52px; margin-left: -52px; padding-right: 52px; padding-left: 52px; }
+  .about-grid { gap: 76px; }
+  .about-copy p { font-size: 16px; line-height: 1.75; }
+  .about-details h3 { font-size: 11px; }
+  .skill-list { gap: 8px; }
+  .skill-pill { padding: 5px 10px; font-size: 12px; }
+  .working-notes p { max-width: 450px; font-size: 15px; line-height: 1.7; }
+  .timeline-item { grid-template-columns: 190px minmax(0, 1fr); gap: 30px; padding: 20px 0; }
+  .timeline-period { font-size: 12px; }
+  .timeline-item h3 { font-size: 21px; }
+  .timeline-item p { max-width: 940px; font-size: 15px; line-height: 1.7; }
+  .education-section { gap: 56px; }
+  .simple-list .timeline-item h3 { font-size: 17px; }
+  .simple-list .timeline-item p { font-size: 14px; }
+  .site-footer p, .site-footer > a:last-child, .footer-links a { font-size: 13px; }
+}
+
+@media (max-width: 720px) {
+  body { font-size: 16px; }
+  .intro-label, .section-kicker { font-size: 10px; }
+  .intro-copy, .section-description { font-size: 15px; }
+  .intro-link, .mobile-nav a { font-size: 14px; }
+  .career-sketch { padding: 27px 27px 30px 30px; }
+  .sketch-caption, .sketch-year, .sketch-step b { font-size: 9px; }
+  .sketch-step { grid-template-columns: 78px 13px 1fr; column-gap: 10px; row-gap: 8px; min-height: 0; align-items: start; }
+  .sketch-year, .sketch-line { grid-row: 1 / span 2; }
+  .sketch-step p { grid-row: 1; margin: 0; font-size: 19px; }
+  .sketch-step b { grid-row: 2; align-self: start; }
+  .sketch-line { min-height: 0; }
+  .project-row { padding-top: 20px; padding-bottom: 21px; }
+  .project-main h3 { font-size: 22px; }
+  .project-summary { font-size: 14px; }
+  .project-tag { padding: 3px 8px; font-size: 9px; }
+  .timeline-period { font-size: 10px; }
+  .timeline-item h3 { font-size: 20px; }
+  .timeline-item p { font-size: 14px; }
+  .about-copy p { font-size: 15px; }
+  .skill-pill { padding: 5px 9px; font-size: 12px; }
+}
+
+/* Keep each journey question close to the skills that answer it. */
+@media (min-width: 721px) {
+  .sketch-step { row-gap: 10px; }
+}
+@media (max-width: 720px) {
+  .sketch-step { row-gap: 8px; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; animation: none !important; } .loading-meter i { width: 42%; transform: none; } }

@@ -55,12 +55,10 @@ jobs:
 
           site_dir="$RUNNER_TEMP/portfolio-site"
           mkdir -p "$site_dir/static/css" "$site_dir/static/js" \
-            "$site_dir/static/data" "$site_dir/static/images/new"
+            "$site_dir/static/images/new"
           cp index.html "$site_dir/index.html"
           cp static/css/portfolio.css "$site_dir/static/css/portfolio.css"
           cp static/js/portfolio.js "$site_dir/static/js/portfolio.js"
-          cp static/data/site-config.js "$site_dir/static/data/site-config.js"
-          cp static/data/preview-data.js "$site_dir/static/data/preview-data.js"
           cp static/images/new/favicon-img-dark.svg \
             "$site_dir/static/images/new/favicon-img-dark.svg"
 
