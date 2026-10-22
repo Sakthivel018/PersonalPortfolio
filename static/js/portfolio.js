@@ -5,9 +5,6 @@
 const API_URL = 'https://script.google.com/macros/s/AKfycbx7yh21tAcxNNoEN7nbYo-24EeJijiXi4cTn71ON200JEdsabMsZZayI-Nci7AnAq0d/exec';
 const API_QUERIES = new Set(['Profile', 'Projects', 'Experience', 'Education', 'Skills', 'Certifications', 'Blogs']);
 const API_RESPONSE_LIMIT = 1024 * 1024;
-const PREVIEW_MODE = new URLSearchParams(window.location.search).get('preview') === '1' || window.location.protocol === 'file:';
-const CONFIG = window.PORTFOLIO_CONFIG || {};
-let previewDataPromise;
 const $ = (selector, root = document) => root.querySelector(selector);
 const make = (tag, className, text) => {
   const element = document.createElement(tag);
@@ -32,17 +29,6 @@ const safeURL = (value, { image = false } = {}) => {
 };
 async function fetchSheet(query) {
   if (!API_QUERIES.has(query)) throw new Error('Unsupported portfolio data request');
-  if (PREVIEW_MODE) {
-    previewDataPromise ||= new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = './static/data/preview-data.js';
-      script.onload = () => resolve(window.portfolioPreviewData || {});
-      script.onerror = () => reject(new Error('Local preview data could not be loaded'));
-      document.head.append(script);
-    });
-    const previewData = await previewDataPromise;
-    return previewData[query] ?? [];
-  }
   if (!API_URL) throw new Error('Safe Apps Script endpoint is not configured');
   const payload = await fetchSheetJSON(query);
   if (!payload || payload.ok !== true || payload.query !== query || !Object.prototype.hasOwnProperty.call(payload, 'data')) {
@@ -102,10 +88,6 @@ async function fetchSheetJSON(query) {
   }
 }
 function asArray(value) { return Array.isArray(value) ? value : []; }
-function isVisible(item) {
-  if (!item || !Object.prototype.hasOwnProperty.call(item, 'visible')) return true;
-  return item.visible === true || item.visible === 1 || ['true', '1', 'yes'].includes(String(item.visible).toLowerCase());
-}
 function makeLink(label, href, className = '') {
   const url = safeURL(href);
   const link = make('a', className, label);
@@ -134,17 +116,14 @@ function appendProjectSummary(element, value) {
   });
   if (offset < text.length) element.append(document.createTextNode(text.slice(offset)));
 }
-function normalizeProjectTitle(value) { return readText(value).toLocaleLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); }
 function renderProjectGroup(items, list, group) {
   list.replaceChildren();
-  const visible = asArray(items).filter(isVisible);
-  const personalTitles = new Set(asArray(CONFIG.presentation && CONFIG.presentation.personalProjectTitles).map(normalizeProjectTitle));
-  const projects = visible.filter((item) => {
-    const isPersonal = item.group === 'personal' || personalTitles.has(normalizeProjectTitle(item.header || item.title));
+  const projects = asArray(items).filter((item) => {
+    const category = readText(item.category).toLocaleLowerCase();
+    const isPersonal = item.group === 'personal' || category.includes('personal');
     return group === 'personal' ? isPersonal : !isPersonal;
   });
   if (!projects.length) {
-    if (group === 'personal' && !(CONFIG.presentation && CONFIG.presentation.showPersonalProjects)) return;
     list.append(make('p', 'empty-state', group === 'personal' ? 'No side projects are selected for display right now.' : 'No work projects are selected for display right now.'));
     return;
   }
@@ -185,7 +164,7 @@ function renderProjects(items) {
 function renderExperience(items) {
   const list = $('#experience-list');
   list.replaceChildren();
-  asArray(items).filter(isVisible).forEach((item) => {
+  asArray(items).forEach((item) => {
     const row = make('article', 'timeline-item');
     row.append(make('span', 'timeline-period', readText(item.span) || readText(item.period)));
     row.append(make('h3', '', readText(item.title) || readText(item.role) || 'Engineering'));
@@ -197,7 +176,7 @@ function renderExperience(items) {
 function renderEducation(items) {
   const list = $('#education-list');
   list.replaceChildren();
-  asArray(items).filter(isVisible).forEach((item) => {
+  asArray(items).forEach((item) => {
     const row = make('article', 'timeline-item');
     row.append(make('span', 'timeline-period', readText(item.span) || readText(item.period)));
     row.append(make('h3', '', readText(item.place) || readText(item.title) || 'Education'));
@@ -209,7 +188,7 @@ function renderEducation(items) {
 function renderSkills(items) {
   const list = $('#skill-list');
   list.replaceChildren();
-  const names = asArray(items).filter(isVisible).map((item) => readText(item && (item.name || item.title))).filter(Boolean);
+  const names = asArray(items).map((item) => readText(item && (item.name || item.title))).filter(Boolean);
   [...new Set(names)].slice(0, 16).forEach((name) => list.append(make('span', 'skill-pill', name)));
   if (!list.childElementCount) list.append(make('span', 'skill-empty', 'No skills are selected for display right now.'));
 }
@@ -217,7 +196,7 @@ function renderCertifications(items) {
   const list = $('#certification-list');
   if (!list) return;
   list.replaceChildren();
-  asArray(items).filter(isVisible).forEach((item) => {
+  asArray(items).forEach((item) => {
     const row = make('article', 'timeline-item');
     row.append(make('span', 'timeline-period', readText(item.span) || 'CERTIFICATION'));
     row.append(make('h3', '', readText(item.title) || 'Professional certification'));
@@ -229,8 +208,8 @@ function renderBlogs(items) {
   const list = $('#blog-list');
   list.replaceChildren();
   const section = $('#writing');
-  const blogs = asArray(items).filter(isVisible).slice(0, 6);
-  section.hidden = blogs.length === 0 || !(CONFIG.presentation && CONFIG.presentation.showWriting !== false);
+  const blogs = asArray(items).slice(0, 6);
+  section.hidden = blogs.length === 0;
   if (!blogs.length) return;
   blogs.forEach((item) => {
     const url = safeURL(item.href);
@@ -248,26 +227,26 @@ function renderBlogs(items) {
 }
 function applyIdentity(data = {}) {
   const name = readText(data && data.name);
-  const identity = CONFIG.identity || {};
-  const displayName = readText(identity.displayName) || name;
+  const displayName = name;
   if (displayName) document.querySelectorAll('.brand').forEach((brand) => { brand.firstChild.textContent = displayName; });
-  const role = readText(identity.role);
+  const role = readText(data && (data.designation || data.role));
   if (role) document.querySelector('.intro-role').textContent = role;
-  const headline = readText(identity.headline);
+  const headline = readText(data && data.headline);
   if (headline) {
     const title = $('#intro-title');
     const lines = headline.split('\n');
     title.replaceChildren(document.createTextNode(lines[0] || ''));
     if (lines.length > 1) { title.append(document.createElement('br')); const accent = make('em', '', lines.slice(1).join(' ')); title.append(accent); }
   }
-  const introduction = readText(identity.introduction);
+  const introduction = readText(data && (data.introduction || data.summary));
   if (introduction) $('.intro-copy').textContent = introduction;
-  const location = readText(identity.location);
+  const location = readText(data && data.location);
   if (location) $('.intro-label').lastChild.textContent = ` ${location.toLocaleUpperCase()} · CURRENTLY AT ASPIRE SYSTEMS`;
 }
 function renderProfile(data) {
   if (!data || typeof data !== 'object' || Array.isArray(data)) return;
   applyIdentity(data);
+  applyProfileLinks(data);
   const aboutValue = data.about_me;
   const about = Array.isArray(aboutValue)
     ? aboutValue.map(readText).filter(Boolean)
@@ -279,8 +258,8 @@ function renderProfile(data) {
     copy.replaceChildren(...about.map((paragraph) => make('p', '', paragraph)));
   }
 }
-function applyProfileLinks() {
-  const links = CONFIG.links || {};
+function applyProfileLinks(data = {}) {
+  const links = { github: data.github || data.github_url };
   document.querySelectorAll('[data-profile-link]').forEach((link) => {
     const key = link.getAttribute('data-profile-link');
     const url = safeURL(links[key]);
@@ -359,16 +338,7 @@ function setupNavigation() {
   });
 }
 function run() {
-  applyProfileLinks();
-  applyIdentity();
   setupNavigation();
-  if (!(CONFIG.presentation && CONFIG.presentation.showPersonalProjects)) {
-    $('#personal').hidden = true;
-    document.querySelectorAll('a[href="#personal"]').forEach((link) => link.hidden = true);
-  }
-  if (PREVIEW_MODE) {
-    $('#preview-banner').hidden = false;
-  }
   load('Profile', renderProfile);
   load('Projects', renderProjects);
   load('Experience', renderExperience);
