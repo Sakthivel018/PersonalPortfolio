@@ -200,7 +200,7 @@ a { color: inherit; }
   .sketch-year, .sketch-line { grid-row: 1 / span 2; }
   .sketch-step p { grid-row: 1; margin: 0; font-size: 20px; }
   .sketch-step b { grid-row: 2; align-self: start; }
-  .sketch-line { min-height: 0; }
+  .sketch-line { min-height: 0; align-self: stretch; }
   .section-description { max-width: 410px; font-size: 15px; line-height: 1.7; }
   .project-row { grid-template-columns: 52px minmax(0, 1fr) 160px; gap: 21px; padding: 25px 10px 27px 0; }
   .project-number { font-size: 11px; }
@@ -238,7 +238,7 @@ a { color: inherit; }
   .sketch-year, .sketch-line { grid-row: 1 / span 2; }
   .sketch-step p { grid-row: 1; margin: 0; font-size: 19px; }
   .sketch-step b { grid-row: 2; align-self: start; }
-  .sketch-line { min-height: 0; }
+  .sketch-line { min-height: 0; align-self: stretch; }
   .project-row { padding-top: 20px; padding-bottom: 21px; }
   .project-main h3 { font-size: 22px; }
   .project-summary { font-size: 14px; }
