@@ -48,12 +48,12 @@ a { color: inherit; }
 .career-sketch { position: relative; padding: 23px 23px 24px 26px; background: #e9e4d8; transform: rotate(1.3deg); box-shadow: 4px 7px 0 #25251f0c; }
 .career-sketch::before { content: ""; position: absolute; width: 72px; height: 19px; top: -8px; left: 36%; background: #d7bc79a8; transform: rotate(-3deg); }
 .sketch-caption { margin: 0 0 17px; color: var(--muted); font: 8px var(--mono); letter-spacing: .08em; }
-.sketch-step { position: relative; display: grid; grid-template-columns: 76px 12px 1fr; column-gap: 10px; min-height: 78px; }
+.sketch-step { position: relative; display: grid; grid-template-columns: 76px 12px 1fr; min-height: 78px; }
 .sketch-year { padding-top: 2px; color: var(--muted); font: 8px/1.5 var(--mono); letter-spacing: .015em; }
 .sketch-line { position: relative; width: 1px; min-height: 69px; background: #bdb6a7; }
 .sketch-line::before { content: ""; position: absolute; top: 3px; left: -3px; width: 7px; height: 7px; border: 1px solid var(--green); border-radius: 50%; background: var(--paper); }
 .sketch-step p { margin: -2px 0 1px; font: 17px/1.12 var(--serif); letter-spacing: -.025em; }
-.sketch-step b { grid-column: 3; color: var(--muted); font: 8px var(--mono); font-weight: 400; }
+.sketch-step b { grid-column: 3; color: var(--muted); font: 8px var(--mono); font-weight: 400; margin-top: 4px; margin-bottom: 8px;}
 .sketch-step.is-current .sketch-line { background: var(--accent); }
 .sketch-step.is-current .sketch-line::before { border-color: var(--accent); background: var(--accent); }
 .sketch-step.is-current p { color: var(--accent); }
@@ -66,7 +66,7 @@ a { color: inherit; }
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 35px; margin-bottom: 27px; }
 .section-kicker { margin-bottom: 7px; color: var(--accent); }
 .section-heading h2 { max-width: 650px; margin: 0; font: 400 clamp(30px, 4vw, 43px)/1.08 var(--serif); letter-spacing: -.05em; }
-.section-description { max-width: 310px; margin: 0 0 3px; color: var(--muted); font-size: 13px; line-height: 1.75; }
+.section-description { max-width: 510px; margin: 0 0 3px; color: var(--muted); font-size: 13px; line-height: 1.75; }
 .project-list { border-top: 1px solid var(--ink); }
 .project-row { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr) 140px; gap: 17px; padding: 21px 8px 23px 0; border-bottom: 1px solid var(--rule); transition: padding .2s ease, background-color .2s ease; }
 .project-row:hover { padding-left: 7px; background: #e9e3d56b; }
@@ -114,14 +114,14 @@ a { color: inherit; }
 .working-notes { margin-top: 25px; padding-top: 16px; border-top: 1px solid #cfc8b8; }
 .working-notes p { max-width: 330px; margin: 0; color: var(--soft-ink); font-size: 13px; line-height: 1.75; }
 .experience-list { border-top: 1px solid var(--ink); }
-.timeline-item { display: grid; grid-template-columns: 165px minmax(0, 1fr); gap: 25px; padding: 17px 0; border-bottom: 1px solid var(--rule); }
+.timeline-item { display: grid; grid-template-columns: 165px minmax(0, 1fr); row-gap: 10px; column-gap: 25px; padding: 17px 0; border-bottom: 1px solid var(--rule); }
 .timeline-period { padding-top: 3px; color: var(--accent); font: 10px/1.7 var(--mono); }
 .timeline-item h3 { margin: 0 0 5px; font: 19px/1.3 var(--serif); }
 .timeline-item p { max-width: 640px; margin: 0; color: var(--soft-ink); font-size: 13px; line-height: 1.75; }
 .experience-list .timeline-period { grid-column: 1; grid-row: 1 / span 2; }
 .experience-list .timeline-item h3 { grid-column: 2; grid-row: 1; }
 .experience-list .timeline-item p { grid-column: 2; grid-row: 2; }
-.education-section { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; padding: 41px 0 55px; border-bottom: 1px solid var(--rule); }
+.education-section { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; padding: 41px; border-bottom: 1px solid var(--rule); }
 .simple-list .timeline-item { display: block; padding: 9px 0; border: 0; }
 .simple-list .timeline-period { display: block; margin-bottom: 3px; }
 .simple-list .timeline-item h3 { font: 15px/1.35 var(--serif); }
@@ -176,7 +176,7 @@ a { color: inherit; }
   .about-copy p { font-size: 14px; }
   .timeline-item { grid-template-columns: 1fr; gap: 4px; padding: 14px 0; }
   .experience-list .timeline-period, .experience-list .timeline-item h3, .experience-list .timeline-item p { grid-column: 1; grid-row: auto; }
-  .education-section { grid-template-columns: 1fr; gap: 23px; padding: 32px 0 42px; }
+  .education-section { grid-template-columns: 1fr; gap: 23px; padding: 32px; }
   .site-footer { min-height: 64px; padding: 12px 21px; gap: 9px; flex-wrap: wrap; }
   .site-footer p { order: 3; width: 100%; }
   .footer-links { margin-left: auto; gap: 13px; }
@@ -196,12 +196,12 @@ a { color: inherit; }
   .career-sketch { padding: 30px 30px 32px 34px; }
   .sketch-caption, .sketch-year, .sketch-step b { font-size: 10px; }
   .sketch-caption { margin-bottom: 21px; }
-  .sketch-step { grid-template-columns: 92px 14px 1fr; column-gap: 12px; row-gap: 10px; min-height: 0; align-items: start; }
+  .sketch-step { grid-template-columns: 92px 14px 1fr; min-height: 0; align-items: start; }
   .sketch-year, .sketch-line { grid-row: 1 / span 2; }
   .sketch-step p { grid-row: 1; margin: 0; font-size: 20px; }
-  .sketch-step b { grid-row: 2; align-self: start; }
+  .sketch-step b { grid-row: 2; align-self: start; margin-top: 4px; margin-bottom: 8px;}
   .sketch-line { min-height: 0; align-self: stretch; }
-  .section-description { max-width: 410px; font-size: 15px; line-height: 1.7; }
+  .section-description { max-width: 510px; font-size: 15px; line-height: 1.7; }
   .project-row { grid-template-columns: 52px minmax(0, 1fr) 160px; gap: 21px; padding: 25px 10px 27px 0; }
   .project-number { font-size: 11px; }
   .project-main h3 { font-size: 25px; }
@@ -217,7 +217,7 @@ a { color: inherit; }
   .skill-list { gap: 8px; }
   .skill-pill { padding: 5px 10px; font-size: 12px; }
   .working-notes p { max-width: 450px; font-size: 15px; line-height: 1.7; }
-  .timeline-item { grid-template-columns: 190px minmax(0, 1fr); gap: 30px; padding: 20px 0; }
+  .timeline-item { grid-template-columns: 190px minmax(0, 1fr); row-gap: 20px; column-gap: 25px; padding: 20px 0; }
   .timeline-period { font-size: 12px; }
   .timeline-item h3 { font-size: 21px; }
   .timeline-item p { max-width: 940px; font-size: 15px; line-height: 1.7; }
@@ -234,7 +234,7 @@ a { color: inherit; }
   .intro-link, .mobile-nav a { font-size: 14px; }
   .career-sketch { padding: 27px 27px 30px 30px; }
   .sketch-caption, .sketch-year, .sketch-step b { font-size: 9px; }
-  .sketch-step { grid-template-columns: 78px 13px 1fr; column-gap: 10px; row-gap: 8px; min-height: 0; align-items: start; }
+  .sketch-step { grid-template-columns: 78px 13px 1fr; min-height: 0; align-items: start; }
   .sketch-year, .sketch-line { grid-row: 1 / span 2; }
   .sketch-step p { grid-row: 1; margin: 0; font-size: 19px; }
   .sketch-step b { grid-row: 2; align-self: start; }
@@ -250,11 +250,5 @@ a { color: inherit; }
   .skill-pill { padding: 5px 9px; font-size: 12px; }
 }
 
-/* Keep each journey question close to the skills that answer it. */
-@media (min-width: 721px) {
-  .sketch-step { row-gap: 10px; }
-}
-@media (max-width: 720px) {
-  .sketch-step { row-gap: 8px; }
-}
+
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; animation: none !important; } .loading-meter i { width: 42%; transform: none; } }
