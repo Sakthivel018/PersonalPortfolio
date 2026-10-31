@@ -142,15 +142,25 @@ function renderProjectGroup(items, list, group) {
     const subtitle = readText(item.sub_title);
     if (subtitle && subtitle !== summary) subtitle.split(/[,|·]/).slice(0, 3).forEach((tag) => { if (tag.trim()) tags.append(make('span', 'project-tag', tag.trim())); });
     if (tags.childElementCount) main.append(tags);
-    const destination = safeURL(item.href);
-    if (destination) {
-      const action = make('a', 'project-action', 'View project');
-      action.href = destination;
-      action.target = '_blank';
-      action.rel = 'noopener noreferrer';
-      action.setAttribute('aria-label', `View ${readText(item.header || item.title) || 'project'} in a new tab`);
-      action.append(document.createTextNode(' ↗'));
-      main.append(action);
+    const detailText = readText(item.details);
+    if (detailText) {
+      const detailId = `project-${group}-details-${index}`;
+      const toggle = make('button', 'project-details-toggle', 'My Contributions');
+      toggle.type = 'button';
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-controls', detailId);
+      const detailPanel = make('div', 'project-detail-copy', detailText);
+      detailPanel.id = detailId;
+      detailPanel.hidden = true;
+      toggle.addEventListener('click', () => {
+        const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!isOpen));
+        toggle.textContent = isOpen ? 'My Contributions' : 'Hide Contributions';
+        detailPanel.hidden = isOpen;
+      });
+      const details = make('div', 'project-details');
+      details.append(toggle, detailPanel);
+      main.append(details);
     }
     row.append(main);
     row.append(make('span', 'project-category', readText(item.category)));
