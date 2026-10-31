@@ -2,7 +2,7 @@
 
 // Public read-only Apps Script deployment. Its response fields must remain
 // allowlisted; never expose phone, email, birthday, or other private fields.
-const API_URL = 'https://script.google.com/macros/s/AKfycbx7yh21tAcxNNoEN7nbYo-24EeJijiXi4cTn71ON200JEdsabMsZZayI-Nci7AnAq0d/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbxb8Z5YTVTa30DnW8LVPGELNjr9LSm3F8YGdTaQHIi--vUHttYlb8iGb3huLs_g8bN6/exec';
 const API_QUERIES = new Set(['Profile', 'Projects', 'Experience', 'Education', 'Skills', 'Certifications', 'Blogs']);
 const API_RESPONSE_LIMIT = 1024 * 1024;
 const $ = (selector, root = document) => root.querySelector(selector);
